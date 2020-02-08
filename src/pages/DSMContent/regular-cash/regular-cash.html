@@ -1,0 +1,150 @@
+<ion-header>
+
+  <ion-navbar hideBackButton>
+    <ion-row>
+      <ion-col col-1>
+        <ion-icon name="md-arrow-round-back" style="font-size: 1.7em;color: white;" (click)="home()"></ion-icon>
+      </ion-col>
+      <ion-col col-10>
+        <ion-title class="centerali">Money Handover ( पैसे सौंप दो )</ion-title>
+      </ion-col>
+      <ion-col col-1>
+        <button ion-button float-right menuToggle icon-only style="display: block !important;">
+          <ion-icon name='menu'></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding="true" overflow-scroll="false" has-bouncing="false">
+
+  <ion-card style="margin: 6px 5px !important;background-color: #d4d4d4;color: #000;">
+    <ion-card-header text-center class="header-trans" style="color: #000;">
+      Total Credential Details
+    </ion-card-header>
+    <ion-card-content>
+
+      <ion-row>
+        <ion-col>
+          Total Amount
+        </ion-col>
+        <ion-col col-1>
+            
+          </ion-col>
+        <ion-col col-1>
+          :
+        </ion-col>
+        <ion-col text-right>
+          {{dsm.total|Mcurrency}}
+        </ion-col>
+      </ion-row>
+
+      <ion-row *ngIf="dsm.activeCS==1" style="color:red">
+        <ion-col col-1>
+          -
+        </ion-col>
+        <ion-col>
+          Total Credit
+        </ion-col>
+        <ion-col col-1>
+          :
+        </ion-col>
+        <ion-col text-right>
+          {{dsm.credit |Mcurrency}}
+        </ion-col>
+      </ion-row>
+
+      <ion-row style="color:red">
+        <ion-col col-1>
+          -
+        </ion-col>
+        <ion-col>
+          Total Testing
+        </ion-col>
+        <ion-col col-1>
+          :
+        </ion-col>
+        <ion-col text-right>
+          {{dsm.totalTesting|Mcurrency}}
+        </ion-col>
+      </ion-row>
+
+    </ion-card-content>
+  </ion-card>
+
+  <!-- <ion-card *ngIf="dsm.loyaltyHide" style="margin: 6px 5px !important;background-color: #d4d4d4;color: #000;">
+
+    <ion-card-header text-center class="header-trans" style="color: #000;">
+      Loyalty Sale Details ( इनाम की बिक्री )
+    </ion-card-header>
+    <ion-card-content>
+
+      <ion-row *ngFor="let sample of dsm.loyalitySale; let i = index; trackBy: trackByIndex">
+        <ion-col>
+          {{sample.name}}
+        </ion-col>
+        <ion-col col-1>
+          :
+        </ion-col>
+        <ion-col>
+          ₹ {{sample.totalAmount|currency:"&nbsp; " : 'symbol-narrow' : '1.2-2'}}
+        </ion-col>
+      </ion-row>
+
+    </ion-card-content>
+  </ion-card> -->
+
+  <ion-row style="padding-left: 5px;color: red;">
+    <ion-col>
+      <ion-label>Balance Amount</ion-label>
+    </ion-col>
+    <ion-col col-1>
+        
+      </ion-col>
+    <ion-col col-1>
+      <ion-label>:</ion-label>
+    </ion-col>
+    <ion-col text-right>
+      <ion-label> {{dsm.balanceAmount|Mcurrency}}</ion-label>
+    </ion-col>
+  </ion-row>
+
+  <ion-card style="color: #000;">
+
+    <ion-card-header text-center class="header-trans" style="color: #000;background-color: #d4d4d4;">
+      Balance Entry
+    </ion-card-header>
+    <ion-card-content>
+
+      <ion-row *ngFor="let paymode of dsm.payModeList; let i = index; trackBy: trackByIndex">
+        <ion-col col-6>
+          {{paymode.name}}:
+        </ion-col>
+        <ion-col col-6>
+          <ion-input type="number" [(ngModel)]="dsm.payMentList[i]"
+            (change)='onChangeAmount($event.target.value,paymode.id)' (input)="onInputTime($event.target.value)"
+            [formControl]="textInput"></ion-input>
+        </ion-col>
+      </ion-row>
+
+    </ion-card-content>
+
+  </ion-card>
+  <ion-row *ngIf=dsm.showPending>
+    <ion-col col-6>
+      Previous Pending Amount:
+    </ion-col>
+    <ion-col col-6>
+      {{dsm.pendingAmount |Mcurrency}}
+    </ion-col>
+  </ion-row>
+  <ion-col col-12>
+    <ion-row>
+      <button ion-button full color="primary" (click)="submit()">
+        Submit
+      </button>
+    </ion-row>
+  </ion-col>
+</ion-content>

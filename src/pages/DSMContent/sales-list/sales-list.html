@@ -1,0 +1,102 @@
+<!--
+  Generated template for the SalesListPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+   
+  <ion-navbar hideBackButton>
+    <ion-row>
+      <ion-col col-1>
+        <ion-icon name="md-arrow-round-back" style="font-size: 1.7em;color: white;" (click)="home()"></ion-icon>
+      </ion-col>
+      <ion-col col-10>
+        <ion-title class="centerali">Sales List</ion-title>
+      </ion-col>
+      <ion-col col-1>
+        <button ion-button float-right menuToggle icon-only style="display: block !important;">
+          <ion-icon name='menu'></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-navbar>
+  
+
+  <ion-segment [(ngModel)]="categories">
+
+    <ion-segment-button  value="credit">
+      Credit Sales <ion-badge item-end>{{creditList.creditSales.length |Mcurrency}}</ion-badge>
+    </ion-segment-button>
+    <ion-segment-button value="loyal">
+      Loyalty Sales<ion-badge item-end>{{loyaltyList.loyaltySales.length |Mcurrency}}</ion-badge>
+    </ion-segment-button>
+
+  </ion-segment>
+
+  <ion-searchbar *ngIf="categories==='credit'"   [(ngModel)]="searchTerm" (ionInput)="filter()"></ion-searchbar>
+  <ion-searchbar  *ngIf="categories==='loyal'" [(ngModel)]="searchTerm1" (ionInput)="filter1()"></ion-searchbar>
+</ion-header>
+
+<ion-content padding="true" overflow-scroll="false" has-bouncing="false">
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div [ngSwitch]="categories">
+
+    <ion-list  *ngSwitchCase="'credit'">
+        <ion-card style="margin: 0px 0px !important;width: 99%;background-color: #11c1f3;color: white;">
+            <div class="padi" text-center style="align-items:center;">
+              <!-- <ion-icon style="font-size: 32px;" name="md-pricetags"></ion-icon> -->
+         <ion-label style="margin: 5px 0px 5px 0px;">HSD Sales : {{HSDqty |Mquantity :'2'}} Ltr</ion-label>
+            <ion-label style="margin: 5px 0px 5px 0px;">MS Sales : {{MSqty |Mquantity :'2'}} Ltr</ion-label>
+ <ion-label style="margin: 5px 0px 5px 0px;">Total Sales : Rs  {{amount |Mcurrency}}</ion-label> 
+ <ion-label style="margin: 5px 0px 5px 0px;">Total Cash given : Rs {{cashSum |Mcurrency}}</ion-label>
+
+            </div>
+          </ion-card>
+      <ion-item  *ngFor="let pumps of  creditList.creditSales;">
+        <ion-avatar item-start>
+          <img src="assets/imgs/pump.png">
+        </ion-avatar>
+        <h5 text-wrap>{{pumps.transporterName}}</h5>
+        <h6 text-capitalize>Vehicle No : {{pumps.regNo}}</h6>
+        <h6>MPD Invoice No : {{pumps.invoiceNo}}</h6>
+       <h6 text-wrap> {{pumps.machineName}} {{pumps.nozzleName}} </h6>
+        <h6 text-wrap> {{pumps.forDate | dateTimeFormat :'T'}}</h6>
+        <!-- <h6 text-wrap>{{pumps.forDate |   dateTimeFormat}}, {{pumps.forDate | date:"hh:mm:a"}}</h6> -->
+        <h6>{{pumps.productName}}  : {{pumps.fuelActual |Mquantity :'2'}} Ltr</h6>
+        <h6 *ngIf="pumps.cashActual!=NaN">Cash Given : Rs {{pumps.cashActual |Mcurrency }}</h6>
+       
+      </ion-item>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'loyal'">
+        <ion-card style="margin: 0px 0px !important;width: 99%;background-color: #11c1f3;color: white;">
+            <div class="padi" text-center style="align-items:center;">
+              <!-- <ion-icon style="font-size: 32px;" name="md-pricetags"></ion-icon> -->
+             <ion-label style="margin: 5px 0px 5px 0px;">HSD Sales : {{HSDqty1 |Mquantity :'2'}} Ltr</ion-label>
+              <ion-label style="margin: 5px 0px 5px 0px;">MS Sales : {{MSqty1 |Mquantity :'2'}} Ltr</ion-label>
+              <ion-label style="margin: 5px 0px 5px 0px;">Total Rs : {{amount1 |Mcurrency}}</ion-label> 
+
+            </div>
+          </ion-card>
+      <ion-item *ngFor="let pumps of  loyaltyList.loyaltySales;">
+        <ion-avatar item-start>
+          <img src="assets/imgs/pump.png">
+        </ion-avatar>
+        <h5 text-wrap>{{pumps.ldriversName}}</h5>
+        <h6 text-capitalize>Vehicle No : {{pumps.vehicleNo}}</h6>
+        <h6>Driver Mobile : {{pumps.driverMobileNo}}</h6>
+        <h6 text-wrap> MPD Invoice No : {{pumps.invoiceNo}}</h6>
+        <h6 text-wrap> {{pumps.machineName}} {{pumps.nozzleName}} </h6>
+        <h6 text-wrap> {{pumps.forDate | dateTimeFormat :'T'}}</h6>
+    
+        <!-- <h6 text-wrap>dateFormat {{pumps.forDate |   dateTimeFormat}}, {{pumps.forDate | date:"hh:mm:a"}}</h6> -->
+        <h6>{{pumps.productName}} : {{pumps.quantity |Mquantity :'2'}} Ltr </h6>
+      </ion-item>
+    </ion-list>
+
+  </div>
+</ion-content>

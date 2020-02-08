@@ -1,0 +1,264 @@
+<!--
+  Generated template for the RequestCancelPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+   
+  <ion-navbar hideBackButton>
+    <ion-row style="border: 0px;">
+      <ion-col col-1>
+        <ion-icon name="md-arrow-round-back" style="font-size: 1.7em;color: white;" (click)="home()"></ion-icon>
+      </ion-col>
+      <ion-col col-10>
+        <ion-title class="centerali">Customers Details</ion-title>
+      </ion-col>
+      <ion-col col-1>
+        <button ion-button float-right menuToggle icon-only style="display: block !important;" (click)="menuClick()">
+          <ion-icon name='menu'></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-navbar>
+    
+</ion-header>
+
+<ion-content padding="true" overflow-scroll="false" has-bouncing="false">
+  <!-- <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher> -->
+
+  <!-- start report Transporter Details -->
+  <div class="container" style="z-index: 10000;">
+    <ion-row>
+      <ion-col col-12>
+        <input type="text" style="width: 53%;height:100%;" placeholder="Customers Name" class="validate filter-input input-reg"
+          [(ngModel)]=query (keyup)=filter()>
+      </ion-col>
+    </ion-row>
+    <div class="" *ngIf="transporterList.length > 0">
+      <ul *ngFor="let item of transporterNameList">
+        <li *ngIf="query.length > 2">
+          <a (click)="select(item)">{{item}}</a>
+        </li>
+      </ul>
+    </div>
+    <div style="color:red;" *ngIf="showEmpty">
+      Sorry No Customers founds!!!
+    </div>
+  </div>
+  <div *ngIf=show>
+    <ion-card>
+      <ion-item text-center style="color:#636363;">
+        <h5><b>{{treport.transporter.transporterName}}</b></h5>
+        <h6>
+          {{treport.transporter.OwnerName}}
+          <br>
+
+          <ion-icon name="call"></ion-icon>&nbsp;&nbsp;<a href="tel: {{treport.transporter.mobileNo}}">{{treport.transporter.mobileNo}}
+          </a>
+          <br>
+          {{treport.transporter.cityName}}, {{treport.transporter.regionName}}
+          <br>
+          Bill Cycle : {{treport.transporter.billCycleName}}
+        </h6>
+      </ion-item>
+    </ion-card>
+
+    <div style="padding-bottom: 5px;">
+      <ion-row text-center>
+        <ion-col class="head-table tab-bg-assertive">
+          No. of Vehicles
+        </ion-col>
+      </ion-row>
+      <ion-row class="contenttable" align-items-start>
+        <ion-col  text-center>
+          <b>Blanket</b>
+        </ion-col>
+        <ion-col text-center>
+          <b>Non-Blanket</b>
+        </ion-col>
+        <ion-col  text-center>
+          <b>Total</b>
+        </ion-col>
+      </ion-row>
+      <ion-row class="contenttable2" align-items-start>
+        <ion-col  text-center>
+          {{blanketTotal |Mcurrency}}
+        </ion-col>
+        <ion-col  text-center>
+          {{nonblanketTotal |Mcurrency}}
+        </ion-col>
+        <ion-col  text-center>
+          {{treport.totalVehicle.vehicleCt |Mcurrency}}
+        </ion-col>
+      </ion-row>
+    </div>
+
+    <div style="padding-bottom: 5px;">
+      <ion-row text-center>
+        <ion-col class="head-table tab-bg-assertive">
+          Credit Limit
+        </ion-col>
+      </ion-row>
+      <ion-row class="contenttable" align-items-start>
+        <ion-col text-center>
+          <b>Limit</b>
+        </ion-col>
+        <ion-col  text-center>
+          <b>Used</b>
+        </ion-col>
+        <ion-col  text-center>
+          <b>Available</b>
+        </ion-col>
+      </ion-row>
+      <ion-row class="contenttable2" align-items-start>
+        <ion-col  text-center>
+            {{treport.transporterLimit.creditLimitAllotted |Mcurrency}}
+        </ion-col>
+        <ion-col text-center>
+            {{treport.transporterLimit.usedCreditLimit |Mcurrency}}
+        </ion-col>
+        <ion-col  text-center>
+            {{treport.transporterLimit.creditLimitBalance |Mcurrency}}
+        </ion-col>
+      </ion-row>
+    </div>
+
+    <div style="padding-bottom: 5px;">
+      <ion-row text-center>
+        <ion-col class="head-table tab-bg-assertive">
+          Credit Used
+        </ion-col>
+      </ion-row>
+      <ion-row class="contenttable" align-items-start>
+        <ion-col  text-center>
+          <b>Fuel</b>
+        </ion-col>
+        <ion-col  text-center>
+          <b>Cash</b>
+        </ion-col>
+        <ion-col  text-center>
+          <b>Total</b>
+        </ion-col>
+      </ion-row>
+      <ion-row class="contenttable2" align-items-start>
+        <ion-col  text-center>
+            {{treport.transporterLimitDetail.creditFuel |Mcurrency}}
+        </ion-col>
+        <ion-col  text-center>
+            {{treport.transporterLimitDetail.creditCash |Mcurrency}}
+        </ion-col>
+        <ion-col  text-center>
+            {{treport.transporterLimitDetail.total | Mcurrency}}
+        </ion-col>
+      </ion-row>
+
+    </div>
+<!-- 
+    <div *ngIf="fuelHide" style="padding-bottom: 5px;">
+      <ion-row text-center>
+        <ion-col class="head-table tab-bg-assertive">
+          Last Bill Against Fuel
+        </ion-col>
+      </ion-row>
+      <ion-row class="contenttable" align-items-start>
+        <ion-col  text-center>
+          <b>Bill No:</b>
+        </ion-col>
+        <ion-col text-center>
+          <b>Date</b>
+        </ion-col>
+        <ion-col  text-center>
+          <b>Amount</b>
+        </ion-col>
+      </ion-row>
+      <ion-row class="contenttable2" align-items-start>
+        <ion-col  text-center>
+          {{treport.transporterFuelBill.billNo}}
+        </ion-col>
+        <ion-col  text-center>
+          {{treport.transporterFuelBill.billDate | dateTimeFormat}}
+        </ion-col>
+        <ion-col  text-center>
+            {{treport.transporterFuelBill.billAmount| Mcurrency}}
+        </ion-col>
+      </ion-row>
+      <ion-row align-items-start class="contenttable" *ngIf="treport.transporterFuelBillPayment.billAmount!==0">
+        <ion-col  text-center>
+          <b>Last Paid Amount</b>
+        </ion-col>
+        <ion-col  text-center>
+          <b>Paid Date</b>
+        </ion-col>
+        <ion-col text-center>
+          <b>Paid Time</b>
+        </ion-col>
+      </ion-row>
+      <ion-row  class="contenttable2"  align-items-start *ngIf="treport.transporterFuelBillPayment.billAmount!==0">
+        <ion-col text-center>
+            {{treport.transporterFuelBillPayment.billAmount |Mcurrency}}
+        </ion-col>
+        <ion-col  text-center>
+          {{treport.transporterFuelBillPayment.created_at |dateTimeFormat}}
+        </ion-col>
+        <ion-col text-center>
+          {{treport.transporterFuelBillPayment.created_at |date:'hh:mm a'}}
+        </ion-col>
+      </ion-row>
+    </div>
+
+    <div *ngIf="cashHide" style="padding-bottom: 5px;">
+      <ion-row text-center>
+        <ion-col class="head-table tab-bg-assertive">
+          Last Bill Against Cash
+        </ion-col>
+      </ion-row>
+      <ion-row  class="contenttable" align-items-start>
+        <ion-col  text-center>
+          <b>Bill No:</b>
+        </ion-col>
+        <ion-col  text-center>
+          <b>Date</b>
+        </ion-col>
+        <ion-col  text-center>
+          <b>Amount</b>
+        </ion-col>
+      </ion-row>
+      <ion-row class="contenttable2" align-items-start>
+        <ion-col  text-center>
+          {{treport.transporterCashBill.billNo}}
+        </ion-col>
+        <ion-col  text-center>
+          {{treport.transporterCashBill.billDate | dateTimeFormat}}
+        </ion-col>
+        <ion-col  text-center>
+            {{treport.transporterCashBill.billAmount |Mcurrency}}
+        </ion-col>
+      </ion-row>
+      <ion-row class="contenttable" align-items-start *ngIf="treport.transporterCashBillPayment.billAmount!==0">
+        <ion-col  text-center>
+          <b>Paid Amount</b>
+        </ion-col>
+        <ion-col  text-center>
+          <b>Paid Date</b>
+        </ion-col>
+        <ion-col  text-center>
+          <b>Paid Time</b>
+        </ion-col>
+      </ion-row>
+      <ion-row align-items-start *ngIf="treport.transporterCashBillPayment.billAmount!==0">
+        <ion-col class="contenttable2" text-center>
+            {{treport.transporterCashBillPayment.amount | Mcurrency}}
+        </ion-col>
+        <ion-col class="contenttable2" text-center>
+          {{treport.transporterCashBillPayment.created_at | dateTimeFormat}}
+        </ion-col>
+        <ion-col class="contenttable2" text-center>
+          {{treport.transporterCashBillPayment.created_at |date:'hh:mm a'}}
+        </ion-col>
+      </ion-row>
+    </div> -->
+  </div>
+</ion-content>

@@ -1,0 +1,13 @@
+{
+  "name": "PetroERP",
+  "integrations": {
+    "cordova": {}
+  },
+  "proxies": [
+    {
+      "path":"/home",
+      "proxyUrl": "https://petroerp.in/api"
+    }
+  ],
+  "type": "ionic-angular"
+}

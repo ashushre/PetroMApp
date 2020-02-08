@@ -1,0 +1,37 @@
+page-credit-sale {
+    [col-6] {
+        padding: 8px 0px;
+        font-size: 1.4rem;
+    }
+    [col-8] {
+        padding: 9px 0px !important;
+    }
+    .text-input {
+        border-bottom-width: 1px;
+        border-style: solid;
+        border-color: initial;
+        border-image: initial;
+        background: transparent;
+    }
+    ul, menu, dir {
+        display: block;
+        list-style-type: disc;
+        margin-block-start: 1em;
+        margin-block-end: 1em;
+        margin-inline-start: 0px;
+        margin-inline-end: 0px;
+        padding-inline-start: 0px;
+        list-style-type: none;
+    }
+    a{
+        color: red;
+    }
+    .h1,.sample{
+        font-family: Poppins-Regular;
+        font-size: 27px;
+        line-height: 1.5;
+        color: #666666;
+        margin: 0px;
+    }
+ 
+}

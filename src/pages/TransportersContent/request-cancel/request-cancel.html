@@ -1,0 +1,561 @@
+<ion-header>
+   
+  <ion-navbar hideBackButton>
+    <ion-row style="border: 0px;">
+      <ion-col col-1>
+        <ion-icon name="md-arrow-round-back" style="font-size: 1.7em;color: white;" (click)="home()"></ion-icon>
+      </ion-col>
+      <ion-col col-10>
+        <ion-title class="centerali">Request Details</ion-title>
+      </ion-col>
+      <ion-col col-1>
+        <button ion-button float-right menuToggle icon-only style="display: block !important;" (click)="menuClick()">
+          <ion-icon name='menu'></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-navbar>
+  
+</ion-header>
+
+<ion-content padding="true" overflow-scroll="false" has-bouncing="false">
+
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-card>
+
+    <ion-card-header>
+      Request Details
+    </ion-card-header>
+
+    <ion-card-content>
+
+      <ion-list>
+
+        <ion-row>
+          <ion-col>
+            Pump Name
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col>
+            {{fuelRequested.pumpName}}
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col>
+            Request Date
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col>
+            {{fuelRequested.created_at |dateTimeFormat}}
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col>
+            Request Time
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col>
+            {{fuelRequested.created_at | date:"hh:mm a"}}
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col>
+            Requested By
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col>
+            {{fuelRequested.requested_by}}
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col>
+            Vehicle No
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col text-uppercase>
+            {{fuelRequested.regNo}}
+          </ion-col>
+        </ion-row>
+
+<!-- 
+        <ion-row>
+          <ion-col>
+            OTP
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col>
+            {{fuelRequested.otp}}
+          </ion-col>
+        </ion-row> -->
+
+        <ion-row *ngIf="fuelRequested.driverName">
+          <ion-col>
+            Driver Name
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col>
+            {{fuelRequested.driverName}}
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="fuelRequested.driverMobileNo">
+            <ion-col>
+              Driver Mobile No
+            </ion-col>
+            <ion-col col-1>
+              :
+            </ion-col>
+            <ion-col>
+              {{fuelRequested.driverMobileNo}}
+            </ion-col>
+          </ion-row>
+        <ion-row>
+          <ion-col>
+            Fuel Type
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col>
+            {{fuelRequested.productName}}
+          </ion-col>
+        </ion-row>
+        <div *ngIf="fuelRequested.fuelRequested!==0 && fuelRequested.requestType!==1">
+        <ion-row *ngIf="pending " style="color:red;">
+          <ion-col>
+            Fuel Requested
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col>
+            {{fuelRequested.fuelRequested |Mquantity}} {{fuelRequested.unitName}}
+          </ion-col>
+        </ion-row>
+        </div>
+        <div *ngIf="fuelRequested.fuelRequested!==0 && fuelRequested.requestType==1">
+          <ion-row *ngIf="pending " style="color:red;">
+            <ion-col>
+              Fuel Requested
+            </ion-col>
+            <ion-col col-1>
+              :
+            </ion-col>
+            <ion-col>
+              Full Tank
+            </ion-col>
+          </ion-row>
+          </div>
+        <div *ngIf="fuelRequested.fuelRequested!==0 && fuelRequested.requestType!==1">
+        <ion-row *ngIf="inProgress || completed || cancelled">
+          <ion-col>
+            Fuel Requested
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col>
+            {{fuelRequested.fuelRequested |Mquantity}} {{fuelRequested.unitName}}
+          </ion-col>
+        </ion-row>
+        </div>
+        <div *ngIf="fuelRequested.fuelRequested!==0 && fuelRequested.requestType==1">
+          <ion-row *ngIf="inProgress || completed || cancelled">
+            <ion-col>
+              Fuel Requested
+            </ion-col>
+            <ion-col col-1>
+              :
+            </ion-col>
+            <ion-col>
+             Full Tank
+            </ion-col>
+          </ion-row>
+          </div>
+<div *ngIf="fuelRequested.cashRequested!==0">
+        <ion-row *ngIf="pending || inProgress " style="color:red;">
+          <ion-col>
+            Cash Requested
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col>
+              {{fuelRequested.cashRequested| Mcurrency}}
+          </ion-col>
+        </ion-row>
+      </div>
+      <div *ngIf="fuelRequested.cashRequested!==0">
+        <ion-row *ngIf="completed">
+          <ion-col>
+            Cash Requested
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col>
+              {{fuelRequested.cashRequested| Mcurrency}}
+          </ion-col>
+        </ion-row>
+</div>
+<div *ngIf="fuelRequested.cashRequested!==0">
+        <ion-row *ngIf="cancelled">
+          <ion-col>
+            Cash Requested
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col>
+              {{fuelRequested.cashRequested| Mcurrency}}
+          </ion-col>
+        </ion-row>
+      </div>
+        <ion-row *ngIf="pending && pendingStatus" style="color:red;">
+          <ion-col>
+            Status
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col>
+            Pending
+          </ion-col>
+        </ion-row>
+
+        <ion-row *ngIf="inProgress && hidestatus" style="color:orange;">
+          <ion-col>
+            Status
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col>
+            In Progress
+          </ion-col>
+        </ion-row>
+
+        <ion-row *ngIf="inProgressOnly" style="color:green;">
+          <ion-col>
+            Status
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col>
+            Completed
+          </ion-col>
+        </ion-row>
+
+        <ion-row *ngIf="completed " style="color:green;">
+          <ion-col>
+            Status
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col>
+            Completed
+          </ion-col>
+        </ion-row>
+
+        <ion-row *ngIf="cancelled">
+          <ion-col>
+            Status
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col>
+            Cancelled
+          </ion-col>
+        </ion-row>
+
+      </ion-list>
+
+    </ion-card-content>
+
+  </ion-card>
+
+  <ion-card *ngIf="inProgress && fuelBoolean">
+
+    <ion-card-header>
+      Fuel Given
+    </ion-card-header>
+
+    <ion-card-content>
+
+      <ion-row>
+        <ion-col>
+          Fuel Rate.
+        </ion-col>
+        <ion-col col-1>
+          :
+        </ion-col>
+        <ion-col>
+            {{fuelRequested.productRate |Mquantity:'2'}} / Liter
+        </ion-col>
+      </ion-row>
+      
+      <ion-row>
+        <ion-col>
+          Fuel Given Qty.
+        </ion-col>
+        <ion-col col-1>
+          :
+        </ion-col>
+        <ion-col>
+          {{fuelRequested.fuelActual |Mquantity}} {{fuelRequested.unitName}}
+        </ion-col>
+      </ion-row>
+      
+      <ion-row>
+        <ion-col>
+          Fuel Given Amt.
+        </ion-col>
+        <ion-col col-1>
+          :
+        </ion-col>
+        <ion-col>
+            {{fuelActualAmount| Mcurrency}}
+        </ion-col>
+      </ion-row>
+
+      <ion-row *ngIf="fuelRequested.kmReading!==null"> 
+        <ion-col>
+          Kilometer
+        </ion-col>
+        <ion-col col-1>
+          :
+        </ion-col>
+        <ion-col>
+           {{fuelRequested.kmReading |Mcurrency}}
+        </ion-col>
+      </ion-row>
+     
+      <ion-row>
+        <ion-col>
+          Fuel Given Date
+        </ion-col>
+        <ion-col col-1>
+          :
+        </ion-col>
+        <ion-col>
+          {{fuelRequested.inprogress_at |dateTimeFormat}}
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col>
+          Fuel Given Time
+        </ion-col>
+        <ion-col col-1>
+          :
+        </ion-col>
+        <ion-col>
+          {{fuelRequested.inprogress_at |date:"hh:mm a"}}
+        </ion-col>
+      </ion-row>
+
+    </ion-card-content>
+
+  </ion-card>
+
+  <ion-card *ngIf="completed && fuelrequestnull">
+
+    <ion-card-header>
+      Fuel Given
+    </ion-card-header>
+
+    <ion-card-content>
+
+      <ion-row>
+        <ion-col>
+          Fuel Given
+        </ion-col>
+        <ion-col col-1>
+          :
+        </ion-col>
+        <ion-col>
+          {{fuelRequested.fuelActual |Mquantity}} {{fuelRequested.unitName}}
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col>
+          Fuel Given Amt.
+        </ion-col>
+        <ion-col col-1>
+          :
+        </ion-col>
+        <ion-col>
+            {{fuelActualAmount| Mcurrency}}
+        </ion-col>
+      </ion-row>
+
+      
+      <ion-row *ngIf="fuelRequested.kmReading!==null"> 
+        <ion-col>
+          Kilometer
+        </ion-col>
+        <ion-col col-1>
+          :
+        </ion-col>
+        <ion-col>
+           {{fuelRequested.kmReading |Mcurrency}}
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col>
+          Fuel Given Date
+        </ion-col>
+        <ion-col col-1>
+          :
+        </ion-col>
+        <ion-col>
+          {{fuelRequested.inprogress_at |dateTimeFormat}}
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col>
+          Fuel Given Time
+        </ion-col>
+        <ion-col col-1>
+          :
+        </ion-col>
+        <ion-col>
+          {{fuelRequested.inprogress_at |date:"hh:mm a"}}
+        </ion-col>
+      </ion-row>
+
+    </ion-card-content>
+
+  </ion-card>
+
+  <ion-card *ngIf="completed && cashrequestnull">
+
+    <ion-card-header>
+      Cash Given
+    </ion-card-header>
+
+    <ion-card-content>
+
+      <ion-row>
+        <ion-col>
+          Cash Given
+        </ion-col>
+        <ion-col col-1>
+          :
+        </ion-col>
+        <ion-col>
+            {{fuelRequested.cashActual| Mcurrency}}
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col>
+          Cash Given Date
+        </ion-col>
+        <ion-col col-1>
+          :
+        </ion-col>
+        <ion-col>
+          {{fuelRequested.completed_at |dateTimeFormat}}
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col>
+          Cash Given Time
+        </ion-col>
+        <ion-col col-1>
+          :
+        </ion-col>
+        <ion-col>
+          {{fuelRequested.completed_at |date:"hh:mm a"}}
+        </ion-col>
+      </ion-row>
+
+    </ion-card-content>
+
+  </ion-card>
+
+  <ion-card *ngIf="cancelled">
+
+    <ion-card-header style="color:red;">
+      Cancelled Details
+    </ion-card-header>
+
+    <ion-card-content>
+
+      <ion-row>
+        <ion-col>
+          Cancelled Date
+        </ion-col>
+        <ion-col col-1>
+          :
+        </ion-col>
+        <ion-col>
+          {{fuelRequested.updated_at |dateTimeFormat}}
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col>
+          Cancelled Time
+        </ion-col>
+        <ion-col col-1>
+          :
+        </ion-col>
+        <ion-col>
+          {{fuelRequested.updated_at |date:"hh:mm a"}}
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col>
+          Cancelled By
+        </ion-col>
+        <ion-col col-1>
+          :
+        </ion-col>
+        <ion-col>
+          {{fuelRequested.updated_by}}
+        </ion-col>
+      </ion-row>
+
+    </ion-card-content>
+
+  </ion-card>
+
+  <ion-row *ngIf="pending" style="border: 0px;">
+    <ion-col col-12>
+      <button ion-button full color="danger" (click)="cancelRequest(fuelRequested.id)">
+        Cancel Request
+      </button>
+    </ion-col>
+  </ion-row>
+
+</ion-content>

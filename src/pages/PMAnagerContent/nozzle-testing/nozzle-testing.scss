@@ -1,0 +1,23 @@
+page-nozzle-testing {
+    [col-6] {
+        padding: 8px 0px;
+        font-size: 16px;
+    }
+    [col-8] {
+        padding: 9px 0px !important;
+    }
+    [col-12] {
+        padding: 5px 0px 5px 0px;
+    }
+    .tab-bg-assertive1 {
+        background-color: #9c9c9c;
+        color: #ffffff;
+        font-size: 1.3rem;
+    }
+    .padding{
+        padding-bottom: 10px;
+    }
+    .text-input {
+        border-bottom: 1px #000 solid;
+    }
+}

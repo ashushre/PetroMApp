@@ -1,0 +1,190 @@
+<!--
+  Generated template for the PumpTransportersListPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+   
+  <ion-navbar hideBackButton>
+    <ion-row>
+      <ion-col col-1>
+        <ion-icon name="md-arrow-round-back" style="font-size: 1.7em;color: white;" (click)="home()"></ion-icon>
+      </ion-col>
+      <ion-col col-10>
+        <ion-title class="centerali">Customers</ion-title>
+      </ion-col>
+      <ion-col col-1>
+        <button ion-button float-right menuToggle icon-only style="display: block !important;" (click)="menuClick()">
+          <ion-icon name='menu'></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-navbar>
+  
+  <ion-segment [(ngModel)]="categories">
+    <ion-segment-button value="active">
+      Active <ion-badge item-end>{{activeCount}}</ion-badge>
+    </ion-segment-button>
+    <ion-segment-button value="deactive">
+      Deactive <ion-badge item-end>{{deactiveCount}}</ion-badge>
+    </ion-segment-button>
+    <ion-segment-button value="defaulter">
+      Defaulter <ion-badge item-end>{{defaulterCount}}</ion-badge>
+    </ion-segment-button>
+  </ion-segment>
+  <ion-searchbar *ngIf="categories==='active'" [(ngModel)]="searchTerm" (ionInput)="filter()"></ion-searchbar>
+  <ion-searchbar *ngIf="categories==='deactive'" [(ngModel)]="searchTerm1" (ionInput)="filter1()"></ion-searchbar>
+  <ion-searchbar *ngIf="categories==='defaulter'" [(ngModel)]="searchTerm2" (ionInput)="filter2()"></ion-searchbar>
+</ion-header>
+
+
+<ion-content padding="true" overflow-scroll="false" has-bouncing="false">
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div [ngSwitch]="categories">
+
+    <ion-list *ngSwitchCase="'active'">
+
+      <div *ngIf=hide>
+        <ion-item *ngFor="let item of activePumpList" (click)="PumpTransporterDetailsPage(item.id)">
+          <ion-avatar item-start>
+            <img src="assets/imgs/transport.png">
+          </ion-avatar>
+          <h5 text-capitalize text-wrap>{{item.name}}</h5>
+         <!-- <h6>
+            <ion-row>
+              <ion-col style="padding-left: 0px;" col-5>Limit Allotted(Rs)</ion-col>
+              <ion-col style="padding-left: 0px;" col-1>:</ion-col>
+              <ion-col style="padding-left: 0px;" col-6>{{item.creditLimitAllotted | Mcurrency }}</ion-col>
+            </ion-row>
+          </h6>
+          <h6 style="color:#4c6df9;">
+            <ion-row>
+              <ion-col style="padding-left: 0px;" col-5> Used Limit(Rs)</ion-col>
+              <ion-col style="padding-left: 0px;" col-1>:</ion-col>
+              <ion-col style="padding-left: 0px;" col-6>{{item.creditUsed | Mcurrency }}</ion-col>
+            </ion-row>
+          </h6>
+          <h6 style="color:red;">
+            <ion-row>
+              <ion-col style="padding-left: 0px;" col-5> Balance Limit(Rs)</ion-col>
+              <ion-col style="padding-left: 0px;" col-1>:</ion-col>
+              <ion-col style="padding-left: 0px;" col-6>{{item.creditLimitBalance | Mcurrency }}</ion-col>
+            </ion-row>
+          </h6>-->
+          <!-- <h6>
+            <a href="tel: {{'Mobile No.'}}">
+              <ion-row>
+                <ion-col style="padding-left: 0px;" col-5>Mobile No.</ion-col>
+                <ion-col style="padding-left: 0px;" col-1>:</ion-col>
+                <ion-col style="padding-left: 0px;" col-6>{{item.mobileNo}}</ion-col>
+              </ion-row>
+            </a>
+          </h6> -->
+        </ion-item>
+
+      </div>
+
+      <div *ngIf=show text-center style="padding-top:10px;">
+        Sorry No current Customers are activated.
+      </div>
+
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'deactive'">
+      <div *ngIf=view>
+
+        <ion-item *ngFor="let item of deactivePumpList" (click)="PumpTransporterDetailsPage(item.id)">
+          <ion-avatar item-start>
+            <img src="assets/imgs/transport.png">
+          </ion-avatar>
+          <h5 text-capitalize text-wrap>{{item.name}}</h5>
+          <!-- <h6>
+            <ion-row>
+              <ion-col style="padding-left: 0px;" col-5>Limit Allotted(Rs)</ion-col>
+              <ion-col style="padding-left: 0px;" col-1>:</ion-col>
+              <ion-col style="padding-left: 0px;" col-6>{{item.creditLimitAllotted | Mcurrency }}</ion-col>
+            </ion-row>
+          </h6>
+          <h6 style="color:#4c6df9;">
+            <ion-row>
+              <ion-col style="padding-left: 0px;" col-5> Used Limit(Rs)</ion-col>
+              <ion-col style="padding-left: 0px;" col-1>:</ion-col>
+              <ion-col style="padding-left: 0px;" col-6>{{item.creditUsed | Mcurrency}}</ion-col>
+            </ion-row>
+          </h6>
+          <h6 style="color:red;">
+            <ion-row>
+              <ion-col style="padding-left: 0px;" col-5> Balance Limit(Rs)</ion-col>
+              <ion-col style="padding-left: 0px;" col-1>:</ion-col>
+              <ion-col style="padding-left: 0px;" col-6>{{item.creditLimitBalance | Mcurrency}}</ion-col>
+            </ion-row>
+          </h6> -->
+          <!-- <ion-note item-end><a href="tel: {{'Mobile No.'}}">
+              <ion-icon name="call"></ion-icon>&nbsp;&nbsp;{{item.mobileNo}}
+            </a></ion-note> -->
+        </ion-item>
+
+      </div>
+
+      <div *ngIf=nonview text-center style="padding-top:10px;">
+        Sorry No current Customers are deactivated.
+      </div>
+
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'defaulter'">
+      <div *ngIf=def>
+
+        <ion-item *ngFor="let item of defaulterList" (click)="PumpTransporterDetailsPage(item.id)">
+          <ion-avatar item-start>
+            <img src="assets/imgs/transport.png">
+          </ion-avatar>
+          <h5 text-capitalize text-wrap>{{item.name}}</h5>
+          <!-- <h6>
+            <ion-row>
+              <ion-col style="padding-left: 0px;" col-5>Limit Allotted(Rs)</ion-col>
+              <ion-col style="padding-left: 0px;" col-1>:</ion-col>
+              <ion-col style="padding-left: 0px;" col-6>{{item.creditLimitAllotted | Mcurrency}}</ion-col>
+            </ion-row>
+          </h6>
+          <h6>
+            <ion-row>
+              <ion-col style="padding-left: 0px;" col-5>Used Limit(Rs)</ion-col>
+              <ion-col style="padding-left: 0px;" col-1>:</ion-col>
+              <ion-col style="padding-left: 0px;" col-6>{{item.creditUsed | Mcurrency}}</ion-col>
+            </ion-row>
+          </h6>
+          <h6 style="color:#4c6df9;">
+            <ion-row>
+              <ion-col style="padding-left: 0px;" col-5>Defaulter Date</ion-col>
+              <ion-col style="padding-left: 0px;" col-1>:</ion-col>
+              <ion-col style="padding-left: 0px;" col-6>{{item.updated_at |dateTimeFormat}}</ion-col>
+            </ion-row>
+          </h6>
+
+          <h6 style="color: red;">
+            <ion-row>
+              <ion-col style="padding-left: 0px;" col-5>Defaulter Days</ion-col>
+              <ion-col style="padding-left: 0px;" col-1>:</ion-col>
+              <ion-col style="padding-left: 0px;" col-6>{{item.days}}</ion-col>
+            </ion-row>
+          </h6> -->
+          <!-- <ion-note item-end><a href="tel: {{'Mobile No.'}}">
+              <ion-icon name="call"></ion-icon>&nbsp;&nbsp;{{item.mobileNo}}
+            </a></ion-note> -->
+        </ion-item>
+
+      </div>
+
+      <div *ngIf=nondef text-center style="padding-top:10px;">
+        Sorry No current Defaulters are presented.
+      </div>
+
+    </ion-list>
+
+  </div>
+</ion-content>

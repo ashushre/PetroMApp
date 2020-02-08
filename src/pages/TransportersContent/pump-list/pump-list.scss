@@ -1,0 +1,43 @@
+.md,
+.ios,
+.wp {
+  .custom-alert-danger {
+    > div {
+      background: red; // if you don't use .md, .ios, .mp initially, you'd have to use !important here.
+      color: #fff important;
+
+     // margin-bottom: 10px;
+    }
+  }
+}
+.alert-wrapper {
+     
+    .alert-title {
+      text-align: left;
+    }
+}
+p {
+    font-size: 13px;
+    line-height: 1.5;
+    color: #fff;
+    margin: 0px;
+    font-style: normal;
+    /* font-family: Poppins-Regular; */
+    font-family: -apple-system, "Helvetica Neue", "Roboto", sans-serif;
+}
+a{
+    color:#fff
+}
+page-pump-list {
+    .item {
+        border-bottom: 1px solid #dedede;
+        padding-left: 0px;
+    }
+    .shital-box{
+        border: 1px #01358f solid;
+        width: 53%;
+        background-color: #007cff38;
+        padding: 0px 20px;
+    }
+
+}

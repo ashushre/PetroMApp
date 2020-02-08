@@ -1,0 +1,167 @@
+
+<ion-header>
+   
+  <ion-navbar hideBackButton>
+    <ion-row>
+      <ion-col col-1>
+        <ion-icon ios="ios-home" style="font-size: 1.7em;color: white;" md="md-home"></ion-icon>
+      </ion-col>
+      <ion-col col-10>
+        <ion-title class="centerali">{{dsmVariables.name}} [SaleMan]</ion-title>
+      </ion-col>
+      <ion-col col-1>
+        <button ion-button float-right menuToggle icon-only style="display: block !important;">
+          <ion-icon name='menu'></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-navbar>
+  
+</ion-header>
+
+<ion-content padding="true" overflow-scroll="false" has-bouncing="false">
+
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <!-- <ion-row>
+    <ion-col [className]="my_Class" *ngFor="let detail of dsmVariables.dsmReportList; let index=index; let odd=odd; let even=even;"
+      class="row" style="padding: 5px 2px 5px 0px;">
+      <ion-card style="margin: 0px 0px !important;width: 99%">
+        <div class="padi" [ngClass]="{ cardgreen: odd, cardred: even}" text-center style="align-items:center;">
+          <img src="assets/imgs/nozzle.png" style="max-width:30%;display: unset;">
+          <ion-label style="margin: 5px 0px 5px 0px;">{{detail.productName}}</ion-label>
+          <ion-label style="margin: 5px 0px 5px 0px;">Rate : ₹ {{detail.currentRate}}/-</ion-label>
+          <ion-label style="margin: 5px 0px 5px 0px;"><b>Fuel Sold : {{detail.Qty}} Ltr.</b></ion-label>
+        </div>
+      </ion-card>
+    </ion-col>
+  </ion-row> -->
+
+  <ion-row>
+
+    <ion-col [className]="my_Class" *ngIf="dsmVariables.activeCS==1" class="row" (click)="CreditSale()" style="padding: 5px 2px 5px 0px;">
+      <ion-card style="margin: 0px 0px !important;width: 99%;background-color: #e70101;color: white;">
+        <div class="padi" text-center style="align-items:center;">
+          <ion-icon style="font-size: 32px;" name="ios-cash"></ion-icon>
+          <ion-label style="margin: 5px 0px 5px 0px;">Credit Sales</ion-label>
+          <ion-label style="margin: 5px 0px 5px 0px;">उधार बिक्री</ion-label>
+        </div>
+      </ion-card>
+    </ion-col>
+
+    <ion-col [className]="my_Class" *ngIf="dsmVariables.activeLS==1" class="row" (click)="cashSale()" style="padding: 5px 2px 5px 0px;">
+      <ion-card style="margin: 0px 0px !important;width: 99%;background-color: #5cb85c;color: white;">
+        <div class="padi" text-center style="align-items:center;">
+          <ion-icon style="font-size: 32px;" name="md-trophy"></ion-icon>
+          <ion-label style="margin: 5px 0px 5px 0px;">Loyalty Sales</ion-label>
+          <ion-label style="margin: 5px 0px 5px 0px;">इनाम की बिक्री</ion-label>
+        </div>
+      </ion-card>
+    </ion-col>
+
+    <ion-col col-6 *ngIf="dsmVariables.activeLS==1 || dsmVariables.activeCS==1" class="row" (click)="saleList()" style="padding: 5px 2px 5px 0px;">
+      <ion-card style="margin: 0px 0px !important;width: 99%;background-color: #11c1f3;color: white;">
+        <div class="padi" text-center style="align-items:center;">
+          <ion-icon style="font-size: 32px;" name="md-pricetags"></ion-icon>
+          <ion-label style="margin: 5px 0px 5px 0px;">Sales List</ion-label>
+          <ion-label style="margin: 5px 0px 5px 0px;">बिक्री सूची</ion-label>
+        </div>
+      </ion-card>
+    </ion-col>
+
+    <ion-col col-6 class="row" (click)="otherSale()" style="padding: 5px 2px 5px 0px;">
+      <ion-card style="margin: 0px 0px !important;width: 99%;background-color: #07388e;color: white;">
+        <div class="padi" text-center style="align-items:center;">
+          <ion-icon style="font-size: 32px;" name="md-pricetag"></ion-icon>
+          <ion-label style="margin: 5px 0px 5px 0px;">Single Sale</ion-label>
+          <ion-label style="margin: 5px 0px 5px 0px;">एक बिक्री</ion-label>
+        </div>
+      </ion-card>
+    </ion-col>
+
+  </ion-row>
+
+  <!-- <ion-row>
+
+    <ion-col col-6>
+      <div *ngIf="dsmVariables.activeCS==1">
+        <button ion-button full color="danger" (click)="CreditSale()">
+          Credit Sales<br><br>उधार बिक्री<br><br>
+        </button>
+      </div>
+    </ion-col>
+    <ion-col col-6>
+      <div *ngIf="dsmVariables.activeLS==1">
+        <button ion-button full color="success" (click)="cashSale()">
+          Loyalty Sales<br><br>इनाम की बिक्री<br><br>
+        </button>
+      </div>
+    </ion-col>
+    <ion-col col-6>
+      <div *ngIf="dsmVariables.activeLS==1 && dsmVariables.activeCS==1">
+        <button ion-button full color="calm" (click)="saleList()"> Sales List<br><br>बिक्री सूची</button>
+      </div>
+    </ion-col>
+
+    <ion-col col-6>
+      <div *ngIf="dsmVariables.activeLS==1">
+        <button ion-button full color="primary" (click)="otherSale()">Others<br><br>अन्य बिक्री</button>
+      </div>
+    </ion-col>
+  </ion-row> -->
+
+  <ion-row>
+
+    <ion-col col-12 *ngIf="error == undefined || error == null" style="padding: 5px 2px 5px 0px;" text-center>
+      <ion-card text-center style="margin: 0px 0px !important;width: 99%;background-color:#656565;color: white;padding: 5px 5px;">
+        <ion-label text-wrap>My MPD & Nozzle<br> ( मेरी मशीन & नोझल )</ion-label>
+        <ion-label class="row" text-center style="margin: 13px 8px 13px 44px;">
+          <div *ngFor="let nozzle of nozzleList;">{{nozzle.machineName}} {{nozzle.name}}, &nbsp;</div>
+        </ion-label>
+      </ion-card>
+    </ion-col>
+
+  </ion-row>
+
+  <ion-item style="margin: 8px 0 1px;">
+    <ion-row style="color:black;">
+      <ion-col text-center>
+        Shift Close शिफ्ट बंद
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+
+      <ion-col col-6 text-wrap>
+        <button ion-button full style="background-color:#007bff;" (click)="noozleTotal()">Nozzle <br>Totalizer<br><br> नोजल
+         <br> टोटला़ईजर</button>
+      </ion-col>
+      <ion-col col-6 text-wrap>
+        <button ion-button full style="background-color:#007bff;" (click)="regularSale()">
+          Money <br>Handover<br><br>पैसे सौंप दो<br><br>
+        </button>
+      </ion-col>
+
+    </ion-row>
+
+  </ion-item>
+
+</ion-content>
+
+<ion-footer text-center style="padding: 0 30px 0 16px;">
+
+  <ion-row *ngIf="dsmVariables.getCashSubmitted!=null && dsmVariables.status!=4">
+    <ion-col text-center>
+       
+      <div class="dsmname">Cash Submitted  ( नकद जमा ) : <b>{{dsmVariables.getCashSubmitted |Mcurrency }}/-</b></div>
+    </ion-col>
+  </ion-row>
+
+  <ion-row *ngIf="dsmVariables.cashtoSubmitted!=0">
+    <ion-col text-center>
+      <div class="dsmname">Cash Deposit   ( नकद जमा करो ) : <b>{{dsmVariables.cashtoSubmitted |Mcurrency}}/-</b></div>
+    </ion-col>
+  </ion-row>
+
+</ion-footer>

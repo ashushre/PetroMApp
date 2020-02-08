@@ -1,0 +1,327 @@
+<ion-header>
+
+  <ion-navbar hideBackButton>
+    <ion-row>
+      <ion-col col-1>
+        <ion-icon name="md-arrow-round-back" style="font-size: 1.7em;color: white;" (click)="home()"></ion-icon>
+      </ion-col>
+      <ion-col col-10>
+        <ion-title class="centerali">Credit Sales</ion-title>
+      </ion-col>
+      <ion-col col-1>
+        <button ion-button float-right menuToggle icon-only style="display: block !important;">
+          <ion-icon name='menu'></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-navbar>
+
+  <ion-row style="padding:5px 16px;">
+    <div class="container" style="z-index: 10000;">
+      <ion-row>
+        <ion-col col-8>
+          <input id="country" type="text" text-uppercase style="width: 99%;height:99%;" placeholder="Type Vehicle No."
+            class="validate filter-input input-reg" [(ngModel)]=query (keyup)=filter()>
+        </ion-col>
+        <ion-col col-4>
+          <button ion-button full (click)="getBlanket(query)">Blanket</button>
+        </ion-col>
+      </ion-row>
+      <div class="" *ngIf="pumpList.length > 0" style="padding: 5px 10px;">
+        <ul *ngFor="let item of pumpListFilter">
+          <li *ngIf="query.length > 2">
+            <a (click)="select(item)">{{item}}</a>
+          </li>
+        </ul>
+      </div>
+      <div style="color:red;" *ngIf="showEmpty">
+        Sorry, No Non-Blanket Vehicle found.
+      </div>
+    </div>
+  </ion-row>
+</ion-header>
+
+<ion-content padding="true" overflow-scroll="false" has-bouncing="false">
+  <ion-row *ngIf="transporter" style="color: red;margin: 6px 5px !important;margin-top: 100px;">
+    <ion-col>
+      Available Limit
+    </ion-col>
+    <ion-col col-1>
+        :
+      </ion-col>
+    <ion-col>
+     Rs.{{DSMList.availableLimit|Mcurrency:'2'}}
+    </ion-col>
+  </ion-row>
+  <ion-card *ngIf="transporter" style="margin: 6px 5px !important;background-color: #d4d4d4;">
+    <ion-card-header text-center text-wrap text-capitalize class="header-trans">
+      {{DSMList.transporterName}} <br><span style="color:red;">({{Blanket}}) </span>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row *ngIf="created_at">
+          <ion-col style="padding: 1px 0px;">
+            Req. Date
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col style="padding: 1px 0px;">
+            {{DSMList.created_at|date:'dd MMM yyyy'}}
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col style="padding: 1px 0px;">
+            Vehicle No
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col text-uppercase style="padding: 1px 0px;">
+            {{DSMList.regNo}}
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col style="padding: 1px 0px;">
+            Fuel Type
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col style="padding: 1px 0px;">
+            {{DSMList.productName}}
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf=unitName style="color:red;">
+          <ion-col style="padding: 1px 0px;">
+            Fuel Req
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col text-uppercase style="padding: 1px 0px;">
+            {{DSMList.fuelRequested}} {{DSMList.unitName}}
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf=unit>
+          <ion-col style="padding: 1px 0px;">
+            Fuel Req Amount
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col style="padding: 1px 0px;">
+             {{DSMList.fuelRequested | Mcurrency:'2'}}/-
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf=unit style="color:red;">
+          <ion-col style="padding: 1px 0px;">
+            Fuel Req Liter
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col style="padding: 1px 0px;">
+            {{crequest.fuelRequested |Mcurrency:'2'}}
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="showFullTank" style="color:red;">
+          <ion-col style="padding: 1px 0px;">
+            Fuel Req
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col style="padding: 1px 0px;">
+            Full Tank
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col style="padding: 1px 0px;">
+            Cash Req
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col style="padding: 1px 0px;">
+             {{DSMList.cashRequested |Mcurrency:'2'}}
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+  <ion-card *ngIf="nozzleSelect && DSMList.status!=2 && DSMList.fuelRequested!=0.00">
+    <ion-card-header text-center text-capitalize class="header-trans">
+      Select Nozzle
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row style="color:red;">
+          <ion-col col-6 style="padding: 8px 2px;" *ngFor="let nozzle of nozzleListFilter;">
+            <button text-wrap ion-button full (click)="selectNozzle(nozzle)" text-wrap>{{nozzle.machineName}}
+              {{nozzle.name}}</button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+
+  <div text-center *ngIf="nozzleSelect && DSMList.status!=2 && DSMList.fuelRequested!=0.00">
+    OR
+  </div>
+
+  <ion-card *ngIf="nozzleSelect && DSMList.status!=2 && DSMList.fuelRequested!=0.00">
+    <ion-card-header text-center text-capitalize class="header-trans">
+      Scan Nozzle
+    </ion-card-header>
+    <ion-card-content>
+      <button ion-button full color="success" (click)="readQR()">Scan QR Code</button>
+      {{scanData}}
+    </ion-card-content>
+
+
+  </ion-card>
+  <ion-card *ngIf="transporterInput && DSMList.status!=2 && DSMList.fuelRequested!=0.00" style="margin-bottom: 3px !important;">
+    <ion-card-header text-center text-capitalize class="header-trans" style="color:red;">
+      Fuel Dispense Entry<br>
+      {{crequest.machineName}} {{crequest.nozzleName}} ({{crequest.shortName}})
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+        <form novalidate [formGroup]="user">
+          <ion-row>
+            <ion-col col-6>
+              <span style="color: red;">*</span>Fuel Actual in Liters
+            </ion-col>
+            <ion-col col-6>
+              <ion-input type="number" placeholder="Enter Fuel" formControlName="fuelActual" class="form-control"
+                [(ngModel)]="crequest.fuelActual"></ion-input>
+              <ion-item no-lines
+                *ngIf="( user.get('fuelActual').hasError('minlength') || user.get('fuelActual').hasError('required') ) && user.get('fuelActual').touched">
+                <div class="error"
+                  *ngIf="user.get('fuelActual').hasError('required') && user.get('fuelActual').touched">
+                  *Fuel is required.
+                </div>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col col-6>
+              <span style="color: red;">*</span>MPD Invoice No.
+            </ion-col>
+            <ion-col col-6>
+              <ion-input type="number" step="0" placeholder="Enter Invoice" formControlName="invoiceNo"
+                class="form-control" pattern="[0-9]+" [(ngModel)]="crequest.invoiceNo" (change)="Invoice()"></ion-input>
+              <ion-item no-lines
+                *ngIf="( user.get('invoiceNo').hasError('maxlength') || user.get('invoiceNo').hasError('required') || user.get('invoiceNo').hasError('pattern')) && user.get('invoiceNo').touched">
+                <div class="error" *ngIf="user.get('invoiceNo').hasError('required') && user.get('invoiceNo').touched">
+                  *MPD Invoice No. is required.
+                </div>
+                <div class="error" *ngIf="user.get('invoiceNo').hasError('pattern') && user.get('invoiceNo').touched">
+                  *MPD Invoice No. is invalid.
+                </div>
+                <div text-wrap class="error" *ngIf="user.get('invoiceNo').hasError('maxlength') && user.get('invoiceNo').touched">
+                  *Invoice No. is invalid.
+                </div>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </form>
+        <ion-row>
+          <ion-col col-6>
+            Driver Mobile No.
+          </ion-col>
+          <ion-col col-6>
+            <ion-input type="number" placeholder="Driver Mobile No." [(ngModel)]="crequest.driverMobileNo"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col col-6>
+            Driver Name
+          </ion-col>
+          <ion-col col-6>
+            <ion-input type="text" placeholder="Driver Name" [(ngModel)]="crequest.driverName"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col col-6>
+            KM (Kilometer)
+          </ion-col>
+          <ion-col col-6>
+            <ion-input type="number" placeholder="Kilometer" [(ngModel)]="crequest.kmReading"></ion-input>
+          </ion-col>
+        </ion-row>
+        <!-- <ion-row style="margin: 6px 0px !important;">
+          <div col-12 text-center>
+            <img src="{{myphoto}}">
+          </div>
+          <ion-col col-6 style="padding: 0px 0px">
+            <button ion-button (click)="takePhoto()" full color="primary" style="width: 98%;height: 3rem;">Take Photo</button>
+          </ion-col>
+          <ion-col col-6 style="padding: 0px 0px">
+            <button ion-button (click)="uploadImage()" full color="success" style="width: 98%;height: 3rem;">Upload
+              Image</button>
+          </ion-col>
+        </ion-row> -->
+      
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+  <ion-card  *ngIf="transporterInput && DSMList.cashRequested!=0.00">
+    <ion-card-header text-center text-capitalize class="header-trans" style="color:red;">
+      Cash Dispense Entry
+    </ion-card-header>
+  <ion-card-content>
+      <ion-grid>
+          <form novalidate [formGroup]="user1">
+              <ion-row>
+                <ion-col col-6>
+                  <span style="color: red;">*</span>Cash Actual
+                </ion-col>
+                <ion-col col-6>
+                  <ion-input type="number" placeholder="Enter Cash" formControlName="cashActual" class="form-control"
+                    [(ngModel)]="crequest.cashActual"></ion-input>
+                  <ion-item no-lines
+                    *ngIf="( user1.get('cashActual').hasError('minlength') || user1.get('cashActual').hasError('required') ) && user1.get('cashActual').touched">
+                    <div class="error"
+                      *ngIf="user1.get('cashActual').hasError('required') && user1.get('cashActual').touched">
+                      *Cash is required.
+                    </div>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </form>
+              <ion-row>
+                <ion-col col-6>
+                  <span style="color: red;">*</span>Cash Invoice No.
+                </ion-col>
+                <ion-col col-6>
+                  <ion-input type=text placeholder="Enter Invoice" [(ngModel)]="crequest.cashInvoice"></ion-input>
+                    <!-- <ion-input type=text placeholder="Enter Invoice" formControlName="cashInvoice"
+                    class="form-control"  [(ngModel)]="crequest.cashInvoice"></ion-input> -->
+                  <!-- <ion-item no-lines
+                    *ngIf="( user1.get('cashInvoice').hasError('maxlength') || user1.get('cashInvoice').hasError('required') || user1.get('cashInvoice').hasError('pattern')) && user1.get('cashInvoice').touched">
+                    <div class="error" *ngIf="user1.get('cashInvoice').hasError('required') && user1.get('cashInvoice').touched">
+                      *Cash Invoice No. is required.
+                    </div>
+                    <div class="error" *ngIf="user1.get('cashInvoice').hasError('pattern') && user1.get('cashInvoice').touched">
+                      *Cash Invoice No. is invalid.
+                    </div>
+                    <div text-wrap class="error" *ngIf="user1.get('cashInvoice').hasError('maxlength') && user1.get('cashInvoice').touched">
+                      *Cash Invoice No. is invalid.
+                    </div>
+                  </ion-item> -->
+                </ion-col>
+              </ion-row>
+   
+        </ion-grid>
+  </ion-card-content>
+  </ion-card>
+  <ion-row *ngIf="transporterInput">
+    <ion-col col-12>
+      <button ion-button full color="primary" (click)="addRequest()">
+        Submit
+      </button>
+    </ion-col>
+  </ion-row>
+</ion-content>

@@ -1,0 +1,14 @@
+{
+    "ios": {
+      "debug": {
+        "codeSignIdentity": "iPhone Developer",
+        "developmentTeam": "Q724HN5NUD",
+        "packageType": "development"
+      },
+      "release": {
+        "codeSignIdentity": "iPhone Developer",
+        "developmentTeam": "Q724HN5NUD",
+        "packageType": "app-store"
+      }
+    }
+  }

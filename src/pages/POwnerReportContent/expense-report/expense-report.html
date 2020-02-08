@@ -1,0 +1,190 @@
+<!--
+  Generated template for the OilPurchasePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+ 
+  <ion-navbar hideBackButton>
+    <ion-row>
+      <ion-col col-1>
+        <ion-icon name="md-arrow-round-back" style="font-size: 1.7em;color: white;" (click)="home()"></ion-icon>
+      </ion-col>
+      <ion-col col-10>
+        <ion-title class="centerali">Expense</ion-title>
+      </ion-col>
+      <ion-col col-1>
+        <button ion-button float-right menuToggle icon-only style="display: block !important;" (click)="menuClick()">
+          <ion-icon name='menu'></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-navbar>
+  
+</ion-header>
+
+<ion-content padding="true" overflow-scroll="false" has-bouncing="false">
+  <ion-row>
+    <ion-col>
+      <input type="radio" value="d"  (change)="getCategory()"  [(ngModel)]="datewise"  />
+      <b>Datewise</b>
+    </ion-col>
+    <ion-col>
+      <input type="radio" value="c"  (change)="getCategory()" [(ngModel)]="datewise" />
+      <b>Category</b>
+    </ion-col>
+  </ion-row>
+
+  <ion-item style="color:red;">
+    <ion-label style="color:red;">Select Range</ion-label>
+    <ion-select (ionChange)="onChange(dateOption)" class="form-control" [(ngModel)]="dateOption">
+      <ion-option value="1">Today</ion-option>
+      <ion-option value="2">Yesterday</ion-option>
+      <ion-option value="3">Last 3 Days</ion-option>
+      <ion-option value="4" selected>Last 7 Days</ion-option>
+      <ion-option value="5">Last 15 Days</ion-option>
+      <ion-option value="6">This Month</ion-option>
+      <ion-option value="7">Last Month</ion-option>
+      <ion-option value="8">Custom Date range</ion-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item *ngIf="show">
+    <ion-label stacked>Select Start Date</ion-label>
+    <ion-input type="date" max={{currentDate}} displayFormat="DD-MM-YYYY" (ngModelChange)="dateChanged(item)"
+      [(ngModel)]="sDate"></ion-input>
+  </ion-item>
+
+  <ion-item *ngIf="show">
+    <ion-label stacked>Select End Date</ion-label>
+    <ion-input type="date" min={{sDate}} max={{currentDate}} [(ngModel)]="eDate" displayFormat="DD-MM-YYYY"
+      (ngModelChange)="dateChanged(item)"></ion-input>
+  </ion-item>
+
+  <ion-row class="date-row fromto" text-center>
+
+    <ion-col col-6 style="padding:5px 0px;">
+      <ion-row>
+        <ion-label col-5 style="margin:0px;">From:</ion-label>
+        <ion-label col-7 style="margin:0px;">{{startDate |   dateTimeFormat}}</ion-label>
+      </ion-row>
+    </ion-col>
+
+    <ion-col col-6 style="padding:5px 0px;">
+      <ion-row>
+        <ion-label col-4 style="margin:0px;">To:</ion-label>
+        <ion-label col-8 style="margin:0px;">{{endDate |   dateTimeFormat}}</ion-label>
+      </ion-row>
+    </ion-col>
+
+  </ion-row>
+
+
+  <ion-row *ngIf=dateShow align-items-start class="tab-bg-assertive">
+    <ion-col>
+      Date
+    </ion-col>
+    <ion-col text-right>
+      Rs
+    </ion-col>
+  </ion-row>
+
+  <ion-row *ngIf=categoryShow align-items-start class="tab-bg-assertive">
+    <ion-col col-5>
+      Category
+    </ion-col>
+    <ion-col col-4 text-right>
+      Rs
+      </ion-col>
+    <ion-col col-3 text-right>
+      Percent 
+      <br>
+      (%)
+    </ion-col>
+
+  </ion-row>
+
+
+  <div *ngIf="dateShow">
+    <ion-row *ngFor="let expense of reportsexpense;let index=index; let odd=odd; let even=even;" class="row"
+      [ngClass]="{ contenttable: odd, contenttable2: even}">
+      <ion-col *ngIf="expense.sumAmount==0" style="margin-left:0px;">
+        {{expense.forDate|dateTimeFormat }}
+      </ion-col>
+      <ion-col *ngIf="expense.sumAmount!==0" style="margin-left:0px;" (click)="toggleGroup(index)"
+        [ngClass]="{active: isGroupShown(index)}">
+        {{expense.forDate|dateTimeFormat }}
+      </ion-col>
+      <ion-col *ngIf="expense.sumAmount==0" text-right>
+        -
+      </ion-col>
+      <ion-col *ngIf="expense.sumAmount!==0" text-right (click)="toggleGroup(index)"
+        [ngClass]="{active: isGroupShown(index)}">
+        {{expense.sumAmount |Mcurrency:'2'}}
+        <ion-icon item-right [name]="isGroupShown(index) ? 'arrow-dropdown' : 'arrow-dropright'"
+          style="padding-left: 10px;"></ion-icon>
+      </ion-col>
+      <div *ngIf="isGroupShown(index)" col-12 style="padding: 0px 0px 5px 0px;">
+        <ion-card
+          style="margin: 0rem !important;width: 100%;border: 1px solid #387ef5;box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.14), 0 0px 0px 0px rgba(0, 0, 0, 0.2), 0 1px 0px 0 rgba(0, 0, 0, 0.12);">
+          <ion-card-content style="font-size: 1.2rem;">
+            <ion-row style="background-color: rgba(0, 122, 255, 0.34);border-bottom: 1px solid #387ef5;">
+              <ion-col>
+                Expense
+              </ion-col>
+              <ion-col text-right>
+                Amount
+              </ion-col>
+            </ion-row>
+            <ion-row *ngFor="let expenseDetail of expense.data;">
+              <ion-col>
+                {{expenseDetail.name}}
+              </ion-col>
+              <ion-col text-right>
+                {{expenseDetail.amount |Mcurrency :'2'}}
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
+      </div>
+      <!-- </div> -->
+    </ion-row>
+  </div>
+
+
+
+  <div *ngIf="categoryShow">
+      <ion-row *ngFor="let exp of newcategoryList;let index=index; let odd=odd; let even=even;" 
+      class="row" [ngClass]="{ contenttable: odd, contenttable2: even}">
+        <ion-col col-5 text-left text-wrap>
+          {{exp.name}}
+        </ion-col>
+        <ion-col col-4 text-right>
+            {{exp.amount |Mcurrency :'2'}}
+          </ion-col>
+        <ion-col col-3 text-right>
+          {{exp.percentage|Mcurrency :'2'}}
+        </ion-col>
+     
+      </ion-row>
+  </div>
+
+  <ion-row align-items-start class="tab-bg-assertive">
+    <ion-col style="margin-left:0px;">
+      <b>Total</b>
+    </ion-col>
+    <ion-col text-right *ngIf="dateShow && count!==0" >
+        <b>{{count|Mcurrency :'2'}}</b>
+      </ion-col>
+    <ion-col *ngIf="categoryShow && count!==0" text-right col-4>
+      <b>{{count|Mcurrency :'2'}}</b>
+    </ion-col>
+    <ion-col *ngIf="count==0" text-right col-4>
+-
+    </ion-col>
+    <ion-col *ngIf="categoryShow" text-right col-3>
+        <b>100%</b>
+      </ion-col>
+  </ion-row>
+</ion-content>

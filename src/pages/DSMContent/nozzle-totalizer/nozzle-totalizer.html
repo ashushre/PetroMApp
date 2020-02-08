@@ -1,0 +1,131 @@
+<!--
+  Generated template for the RegularCashPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar hideBackButton>
+    <ion-row>
+      <ion-col col-1>
+        <ion-icon name="md-arrow-round-back" style="font-size: 1.7em;color: white;" (click)="home()"></ion-icon>
+      </ion-col>
+      <ion-col col-10>
+        <ion-title class="centerali">Nozzle Totalizer</ion-title>
+      </ion-col>
+      <ion-col col-1>
+        <button ion-button float-right menuToggle icon-only style="display: block !important;">
+          <ion-icon name='menu'></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-navbar>
+
+</ion-header>
+<ion-content padding="true" overflow-scroll="false" has-bouncing="false">
+
+  <div *ngIf=dsm.show>
+    <ion-card *ngFor="let nozzle of dsm.NoozleList; let i = index;"
+      style="margin: 11px 5px !important;border: 1px solid #387ef5;">
+      <ion-card-header text-center class="header-trans"
+        style="background-color: rgba(125, 173, 255, 0.74);color: #000;">
+        {{nozzle.machineName}} [{{nozzle.name}}] - {{nozzle.shortName}}
+      </ion-card-header>
+      <ion-card-content style="padding: 10px 10px;">
+
+        <ion-row style="color:#000;">
+          <ion-col col-5 style="padding: 1px 0px;">
+            Start Reading
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col col-6 style="padding: 1px 2px;" text-right>
+            {{nozzle.startReading}}
+          </ion-col>
+        </ion-row>
+
+        <ion-row style="padding-bottom: 5px;color: red;">
+          <ion-col col-5 style="padding: 1px 0px;">
+            End Reading
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col col-6 style="padding: 1px 0px;">
+            <input type="number" style="width:100%;height:100%;text-align:right"
+              (change)="onChangeValue($event.target.value,i)" [ngModelOptions]="{updateOn: 'blur'}"
+              [ngModel]="dsm.NoozleList[i].endReading">
+            <!-- <ion-input class="text-space" style="border-bottom:1px solid;" (change)='onChangeValue($event.target.value)'  placholder="End Reading" type="number"
+            [(ngModel)]="dsm.NoozleList[i].endReading"></ion-input> -->
+            <!-- [(ngModel)]="dsm.NoozleList[i].endReading| number : '.2-2'"></ion-input> -->
+          </ion-col>
+        </ion-row>
+        <ion-row style="background-color: #cecece;color:#000;font-size: 1.3rem;">
+          <ion-col col-5 >
+            Testing Qty (Ltrs)
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col text-right>
+            {{nozzle.testingQty   | Mcurrency:'2'}}
+          </ion-col>
+        </ion-row>
+
+
+        <ion-row style="background-color: #cecece;color:#000;font-size: 1.3rem;">
+          <ion-col col-5>
+            Net Sales (Ltrs)
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col text-right>              
+            {{nozzle.totalSales | Mcurrency:'2'}} 
+          </ion-col>
+        </ion-row>
+
+        <ion-row style="background-color: #cecece;color:red;font-size: 1.3rem;">
+          <ion-col col-5>
+            Credit Sales (Ltrs)
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col text-right>
+            {{nozzle.creditSalesTotal  | Mcurrency:'2'}}  
+          </ion-col>
+        </ion-row>
+
+
+
+        <ion-row style="background-color: #cecece;color:#000;font-size: 1.3rem;">
+          <ion-col col-5>
+            Cash Sales (Ltrs)
+          </ion-col>
+          <ion-col col-1>
+            :
+          </ion-col>
+          <ion-col text-right>
+            {{nozzle.cashSales  | Mcurrency:'2'}}  
+          </ion-col>
+        </ion-row>
+
+      </ion-card-content>
+    </ion-card>
+
+
+    <ion-row *ngIf="dsm.show ">
+      <button ion-button full color="primary" (click)="saveNozzle()">
+        Submit
+      </button>
+    </ion-row>
+  </div>
+  <div *ngIf="dsm.hide" style="color:red" text-center>
+    <!-- {{dsm.error}} -->
+    "Sorry you cannot fill now nozzle Totalizer"
+  </div>
+
+</ion-content>

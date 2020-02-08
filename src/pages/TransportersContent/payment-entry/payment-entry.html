@@ -1,0 +1,160 @@
+<ion-header>
+   
+  <ion-navbar hideBackButton>
+    <ion-row>
+      <ion-col col-1>
+        <ion-icon ios="ios-home" style="font-size: 1.7em;color: white;" md="md-home" (click)="home()"></ion-icon>
+      </ion-col>
+      <ion-col col-10>
+        <ion-title class="centerali">Payment Entry</ion-title>
+      </ion-col>
+      <ion-col col-1>
+        <button ion-button float-right menuToggle icon-only style="display: block !important;" (click)="menuClick()">
+          <ion-icon name='menu'></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-navbar>
+  
+</ion-header>
+
+<ion-content padding="true" overflow-scroll="false" has-bouncing="false">
+
+  <ion-item>
+    <ion-label slack>Select Pump</ion-label>
+    <ion-select [(ngModel)]="pumpId" #reqPump (ionChange)="selectPump(reqPump.value)">
+      <ion-option text-wrap *ngFor="let pump of pumpList;let i = index" [value]="pump.pumpId">
+        {{pump.pumpName}}
+      </ion-option>
+    </ion-select>
+  </ion-item>
+
+  <!--Bill Detail-->
+  <ion-card style="background-color: #d4d4d4;border: 1px solid #387ef5;" *ngIf="show">
+   <ion-card-header text-center class="header-trans"
+      style="margin-bottom: 3px !important;background-color: rgba(125, 173, 255, 0.74);color: #000;font-size: large;">
+      Bill / Payment Details
+    </ion-card-header>
+
+    <ion-card-content style="padding:5px 5px;">
+      <!--Advance Amount-->
+    <ion-row class="header-trans" *ngIf="show" style="margin-bottom: 3px !important;color:#1a1a1a">
+        <ion-col col-6>
+          Outstanding  Amount:
+        </ion-col>
+        <ion-col col-6 text-right>
+          {{paymentDetail.outstandingAmt |Mcurrency}}
+        </ion-col>
+      </ion-row>
+    
+    </ion-card-content>
+  </ion-card>
+
+  <!--Save Entry-->
+  <ion-card *ngIf="show" style="border: 1px solid #387ef5;">
+    <ion-card-header class="header-trans"
+      style="margin-bottom: 3px !important;background-color: rgba(125, 173, 255, 0.74);color: #000;font-size: large;"
+      *ngIf="showBill" text-center>
+
+
+      Bill Payment
+    </ion-card-header>
+    <ion-card-header class="header-trans"
+      style="margin-bottom: 3px !important;background-color: rgba(125, 173, 255, 0.74);color: #000;font-size: large;"
+      *ngIf="showAdvance" text-center>
+      Advance Payment
+    </ion-card-header>
+    <ion-card-content style="color:red;padding:5px 5px;">
+      <form novalidate [formGroup]="user">
+        <ion-row>
+          <ion-col col-6>
+            *Paid Amount
+          </ion-col>
+          <ion-col col-6>
+            <ion-input type="number" formControlName="amount" class="form-control" [(ngModel)]="payment.amount">
+            </ion-input>
+
+
+            <ion-item no-lines
+              *ngIf="( user.get('amount').hasError('minlength') || user.get('amount').hasError('required') ) && user.get('amount').touched">
+
+              <div class="error" *ngIf="user.get('amount').hasError('required') && user.get('amount').touched">
+                *Amount is required
+              </div>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+
+
+        <ion-row>
+          <ion-col col-6>
+            *Select Paymode:
+          </ion-col>
+          <ion-col col-6>
+            <ion-select [(ngModel)]="payModeId" #reqFuel1 formControlName="paymodeId" class="form-control"
+              (ionChange)="selectPaymodeList(reqFuel1.value)">
+              <ion-option *ngFor="let prod of paymodeList;let i = index" [value]="prod.id" [selected]="i===0">
+                {{prod.name}}
+              </ion-option>
+            </ion-select>
+
+            <ion-item no-lines
+              *ngIf="( user.get('paymodeId').hasError('minlength') || user.get('paymodeId').hasError('required') ) && user.get('paymodeId').touched">
+
+              <div class="error" *ngIf="user.get('paymodeId').hasError('required') && user.get('paymodeId').touched">
+                *Paymode is required
+              </div>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </form>
+      <ion-row *ngIf="paymentDetail.payModeId==12">
+        <ion-col col-6>
+          Cheque No :
+        </ion-col>
+        <ion-col col-6>
+          <ion-input type="number" [(ngModel)]="payment.chequeNo"></ion-input>
+        </ion-col>
+      </ion-row>
+
+      <ion-row *ngIf="paymentDetail.payModeId==12">
+        <ion-col col-6>
+          Cheque Date :
+        </ion-col>
+        <ion-col text-right>
+          <ion-input displayFormat="DD/MM/YY" min={{currentDate}} type="date" [(ngModel)]="payment.chequeDate">
+          </ion-input>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col col-6>
+          Remark :
+        </ion-col>
+        <ion-col col-6>
+          <ion-input type="text" [(ngModel)]="payment.remark"></ion-input>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col col-6>
+          Payment Date
+        </ion-col>
+        <ion-col text-right col-6>
+          <ion-input type="date" min={{currentDate}} [(ngModel)]="payment.forDate" displayFormat="DD-MM-YYYY">
+          </ion-input>
+        </ion-col>
+      </ion-row>
+
+    </ion-card-content>
+  </ion-card>
+
+  <!--Save Method-->
+  <ion-row style="border: 0px;" *ngIf="show">
+    <ion-col col-12>
+      <button  ion-button full color="success" (click)="saveBill()">
+        <ion-icon name="checkmark"></ion-icon>&nbsp; Pay Bill
+      </button>
+    </ion-col>
+  </ion-row>
+</ion-content>

@@ -1,0 +1,10 @@
+
+<ion-slides *ngIf="PImage && PImage.length"  autoplay="3000" loop="true" speed="500" class="slides" pager="true">
+  <ion-slide *ngFor="let Image of PImage;let i = index">
+     <img *ngIf="i!==total" src="{{imgLink}}/{{Image}}" alt="Product Image">
+     <img *ngIf="i==total" src="{{imgLink}}/{{Image}}" alt="Product Image">
+     <button *ngIf="i==total" ion-button color="primary" primary (click)="goToHome()">Start Using My App</button>
+  </ion-slide>
+</ion-slides>
+
+ 

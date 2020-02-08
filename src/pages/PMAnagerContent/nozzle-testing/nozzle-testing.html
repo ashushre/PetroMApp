@@ -1,0 +1,72 @@
+<ion-header>
+     
+  <ion-navbar hideBackButton>
+    <ion-row>
+      <ion-col col-1>
+        <ion-icon name="md-arrow-round-back" style="font-size: 1.7em;color: white;" (click)="home()"></ion-icon>
+      </ion-col>
+      <ion-col col-10>
+        <ion-title class="centerali">Nozzle Testing</ion-title>
+      </ion-col>
+      <ion-col col-1>
+        <button ion-button float-right menuToggle icon-only style="display: block !important;" (click)="menuClick()">
+          <ion-icon name='menu'></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-navbar>
+    
+</ion-header>
+
+<ion-content padding="true" overflow-scroll="false" has-bouncing="false">
+
+  <div class="padding">
+
+    
+
+<div *ngFor="let machine of nozzle; let i = index;">
+    <ion-row  text-center class="tab-bg-assertive1">
+      <ion-col>
+        {{machine.machine}}
+      </ion-col>
+    </ion-row>
+
+    <ion-row align-items-start>
+      <ion-col class="tab-bg-assertive">
+        Nozzle
+      </ion-col>
+      <ion-col class="tab-bg-assertive">
+        SaleMan
+      </ion-col>
+      <ion-col class="tab-bg-assertive" text-right>
+        Qty(ltr)
+      </ion-col>
+    </ion-row>
+    <ion-row *ngFor="let nozzleList of machine.nozzle; let i = index;" class="contenttable2" align-items-start>
+      <ion-col>
+        {{nozzleList.nozzleName}}
+      </ion-col>
+      <ion-col>
+       {{nozzleList.employeeName}}
+      </ion-col>
+      <ion-col text-right *ngIf="nozzleList.rOnly==0">
+        <ion-input class="text-space" type="number" [(ngModel)]="nozzleList.testingQty" readonly (change)='onChangeAmount($event.target.value,nozzleList.empNid)' placeholder="Testing qty"></ion-input>
+      </ion-col>
+      <ion-col text-right *ngIf="nozzleList.rOnly==1">
+        <ion-input class="text-space" type="number"  [(ngModel)]="nozzleList.testingQty" (change)='onChangeAmount($event.target.value,nozzleList.empNid)' placeholder="Testing qty"></ion-input>
+      </ion-col>
+    </ion-row>
+
+  </div>
+</div>
+  <ion-row *ngIf="nozzle.length!==0">
+    <ion-col col-12>
+      <button ion-button full color="primary" (click)="submit()">Submit</button>
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf="nozzle.length==0">
+    <ion-col col-12 text-center style="color:red;">
+      "Sorry No Current working SaleMan present to add Nozzle Testing Qty!!!"
+    </ion-col>
+  </ion-row>
+</ion-content>

@@ -1,0 +1,172 @@
+<!--
+  Generated template for the ProductRatePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+     
+  <ion-navbar hideBackButton>
+    <ion-row>
+      <ion-col col-1>
+        <ion-icon name="md-arrow-round-back" style="font-size: 1.7em;color: white;" (click)="home()"></ion-icon>
+      </ion-col>
+      <ion-col col-10>
+        <ion-title class="centerali">Product Rate</ion-title>
+      </ion-col>
+      <ion-col col-1>
+        <button ion-button float-right menuToggle icon-only style="display: block !important;" (click)="menuClick()">
+          <ion-icon name='menu'></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-navbar>
+    
+</ion-header>
+
+<ion-content padding="true" overflow-scroll="false" has-bouncing="false">
+<div style="border: 2px solid red;padding: 5px; ">
+  <ion-card>
+    <ion-card-header style="color:#4c6df9">
+      <b>Write New Rate<br>
+      (नई दर लिखें)</b>
+
+    </ion-card-header>
+    <ion-card-content>
+      <ion-row class="bg-warning" style="margin-left: -5px;margin-right: -5px;">
+        <ion-col style="padding: 5px 10px 5px 10px;">
+          Product
+        </ion-col>
+        <ion-col text-right style="padding: 5px 10px 5px 10px;">
+          Current Rate
+        </ion-col>
+        <ion-col text-right style="padding: 5px 10px 5px 10px;">
+          New Rate
+        </ion-col>
+      </ion-row>
+      <ion-row *ngFor="let product of products; let i = index; trackBy: trackByIndex">
+        <ion-col>
+          {{product.productName}}
+        </ion-col>
+        <ion-col text-right>
+          {{product.currentRate}}
+        </ion-col>
+        <ion-col text-right>
+          <ion-input type="number" [(ngModel)]="products[i].newRate" placeholder="New Rate" class="input-line">
+          </ion-input>
+        </ion-col>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+
+    <ion-card style="margin-bottom: 0px !important;">
+      <ion-card-content>
+        <ion-row>
+          <ion-col col-5>
+            Effective Date
+          </ion-col>
+          <ion-col text-right>
+            <ion-input  displayFormat="DD/MM/YY" min={{currentDate}}
+              type="date" [(ngModel)]="effectiveDate"></ion-input>
+          </ion-col>
+        </ion-row>
+  
+
+        <ion-row>
+          <ion-col col-8>
+            Effective Time
+          </ion-col>
+          <ion-col text-right>
+            <ion-input readonly  type="time" min={{currentTime}}
+              [(ngModel)]="effectiveTime"></ion-input>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+
+  <ion-list>
+    <ion-row>
+      <ion-col col-12>
+        <button ion-button full color="primary" (click)="addProductRate()">
+          Submit
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-list>
+
+</div>
+<div>
+  <br>
+</div>
+<div style="border: 2px solid #4c6df9;padding: 5px; ">
+    <ion-item style="color:#4c6df9;">
+        <ion-label style="color:#4c6df9;">Check Previous Rates<br>
+          ( पिछले दरे )</ion-label>
+        <ion-select (ionChange)="onChange(dateOption)" class="form-control" [(ngModel)]="dateOption">
+          <ion-option value="1">Today</ion-option>
+          <ion-option value="2">Yesterday</ion-option>
+          <ion-option value="3">Last 3 Days</ion-option>
+          <ion-option value="4" selected>Last 7 Days</ion-option>
+          <ion-option value="5">Last 15 Days</ion-option>
+          <ion-option value="6">This Month</ion-option>
+          <ion-option value="7">Last Month</ion-option>
+          <ion-option value="8">Custom Date range</ion-option>
+        </ion-select>
+      </ion-item>
+    
+      <ion-item *ngIf="show">
+        <ion-label stacked>Select Start Date</ion-label>
+        <ion-input type="date" max={{currentDate}} displayFormat="DD-MM-YYYY" (ngModelChange)="dateChanged(item)"
+          [(ngModel)]="sDate"></ion-input>
+      </ion-item>
+    
+      <ion-item *ngIf="show">
+        <ion-label stacked>Select End Date</ion-label>
+        <ion-input type="date" min={{sDate}} max={{currentDate}} [(ngModel)]="eDate" displayFormat="DD-MM-YYYY"
+          (ngModelChange)="dateChanged(item)"></ion-input>
+      </ion-item>
+    
+  <ion-item style="color:#4c6df9;">
+    <ion-label style="color:#4c6df9;">Select Product</ion-label>
+    <ion-select [(ngModel)]="productId" class="form-control" #reqFuel (ionChange)="ProductSelect(reqFuel.value)">
+      <ion-option *ngFor="let prod of productsList;let i = index" [value]="prod.productId">
+        &nbsp;&nbsp; {{prod.productName}}
+      </ion-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-row align-items-start class="tab-bg-assertive">
+    <ion-col>
+      Date
+    </ion-col>
+    <ion-col>
+      Updated By
+    </ion-col>
+    <ion-col text-right>
+      Previous Rate
+    </ion-col>
+  </ion-row>
+
+  <ion-row *ngFor="let fuel of oldProductList;let index=index; let odd=odd; let even=even;" class="row"
+    [ngClass]="{ contenttable2: odd, contenttable: even}">
+    <ion-col *ngIf="fuel.time!==0">
+      {{fuel.date |dateTimeFormat}}
+    </ion-col>
+    <ion-col *ngIf="fuel.time==0">
+      {{fuel.date |dateTimeFormat}}
+    </ion-col>
+    <ion-col *ngIf="fuel.updatedBy!==0" text-right>
+      {{fuel.updatedBy}}
+    </ion-col>
+    <ion-col *ngIf="fuel.updatedBy==0" text-right>                                
+      -
+    </ion-col>
+    <ion-col *ngIf="fuel.rate!==0" text-right>
+      {{fuel.rate |Mcurrency:'2'}}
+    </ion-col>
+    <ion-col *ngIf="fuel.rate==0" text-right>
+      -
+    </ion-col>
+  </ion-row>
+</div>
+</ion-content>

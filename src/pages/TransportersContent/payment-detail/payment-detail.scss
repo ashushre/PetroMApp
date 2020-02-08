@@ -1,0 +1,21 @@
+page-payment-detail {
+    .card-header-md {
+        padding: 7px 12px 5px 12px;
+        border-bottom: 1px #03264c solid;
+    }
+    ion-input {
+        border-bottom: 1px red solid;
+    }
+    .scroll-content {
+        margin-top: 286px;
+    }
+    .label-md {
+        margin: 8px 8px 10px 0;
+        font-size: larger;
+    }
+    [col-6],
+    [col-5],
+    [col-1] {
+        padding: 0px;
+    }
+}

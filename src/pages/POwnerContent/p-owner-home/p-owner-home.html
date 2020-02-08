@@ -1,0 +1,842 @@
+<ion-header>
+  <ion-navbar hideBackButton>
+    <ion-row>
+      <ion-col col-1>
+        <ion-icon ios="ios-home" style="font-size: 1.7em;color: white;" md="md-home" (click)="home()"></ion-icon>
+      </ion-col>
+      <ion-col col-10>
+        <ion-title class="centerali" text-capitalize>{{name}} [Owner]</ion-title>
+      </ion-col>
+      <ion-col col-1>
+        <button ion-button float-right menuToggle icon-only style="display: block !important;" (click)="menuClick()">
+          <ion-icon name='menu'></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding="true" overflow-scroll="false" has-bouncing="false">
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="info-box bg-primary" (click)="openWebpage('asd')">
+    <div class="info-box-content">
+      <ion-row class="mar">
+        <span class="info-box-text">Outstanding Rs  {{outstandingAmount |Mcurrency}}
+            <!-- <a class="item" href="#" onclick="window.open('http://www.orimi.com/pdf-test.pdf', '_system', 'location=yes'); return false;">
+              Open pdf
+                            </a> -->
+          </span>
+      </ion-row>
+    </div>
+
+  </div>
+  <!-- Current SaleMan at Shift -->
+  <div text-wrap (click)="toggleGroup(8)" [ngClass]="{active: isGroupShown(8)}">
+    <div class="info-box bg-success">
+      <div class="info-box-content">
+        <ion-row class="mar">
+          <span class="info-box-text">Current SaleMan at Shift</span>
+        </ion-row>
+      </div>
+      <div class="info-box-content" style="text-align:right;">
+        <span class="info-box-number">
+          <ion-icon item-right [name]="isGroupShown(8) ? 'arrow-dropdown' : 'arrow-dropright'" style="padding-left: 10px;"></ion-icon>
+        </span>
+      </div>
+    </div>
+    <div *ngIf="isGroupShown(8) && ShiftList.length!==0">
+      <ion-card>
+        <ion-row align-items-start>
+          <ion-col class="Regulardash2">
+            <ion-item class="Regulardash2" style="color:red;">
+              <ion-label slack style="padding-left: 10px;color:red;">Select Machine</ion-label>
+              <ion-select [(ngModel)]="machineId" class="form-control" #reqFuel (ionChange)="MachineSelect(reqFuel.value)">
+                <ion-option value=0 selected>All</ion-option>
+                <ion-option *ngFor="let prod of machineList;let i = index" [selected]="i===0" [value]="prod.id">
+                  &nbsp;&nbsp; {{prod.name}}
+                </ion-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-card-content>
+          <ion-row align-items-start class="Regular-sales-dash">
+            <ion-col style="margin-left:0px;">
+              SaleMan 
+            </ion-col>
+            <ion-col>
+              Machine
+            </ion-col>
+            <ion-col>
+              Nozzle
+            </ion-col>
+            <ion-col>
+              Status
+            </ion-col>
+          </ion-row>
+
+          <ion-row *ngFor="let shift of ShiftList;let index=index; let odd=odd; let even=even;" class="row" [ngClass]="{ Regulardash3: odd, Regulardash2: even}">
+            <ion-col col-3 text-wrap style="margin-left:0px;">
+              {{shift.dsmName}}
+            </ion-col>
+            <ion-col col-3 text-wrap>
+              {{shift.machineName}}
+            </ion-col>
+            <ion-col col-3 text-wrap>
+              {{shift.nozzleName}}
+            </ion-col>
+            <ion-col col-3 text-wrap *ngIf="shift.status==2" style="color:green;">
+              Working
+            </ion-col>
+            <ion-col col-3 text-wrap *ngIf="shift.status==1" style="color:#e99700;">
+              Assigned
+            </ion-col>
+          </ion-row>
+
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div *ngIf="isGroupShown(8) && ShiftList.length==0">
+      <ion-card class="Regular-sales-dash3" style="color:red" text-center>
+        <ion-card-content>
+          Sorry No Current working shifts are present
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+
+  <!-- Current Fuel Stock -->
+  <div text-wrap (click)="toggleGroup(3)" [ngClass]="{active: isGroupShown(3)}">
+    <div class="info-box bg-primary">
+      <div class="info-box-content">
+        <ion-row class="mar">
+          <span class="info-box-text">Current Fuel Stock</span>
+        </ion-row>
+      </div>
+      <div class="info-box-content" style="text-align:right;">
+        <span class="info-box-number">
+          <ion-icon item-right [name]="isGroupShown(3) ? 'arrow-dropdown' : 'arrow-dropright'" style="padding-left: 10px;"></ion-icon>
+        </span>
+      </div>
+    </div>
+    <div *ngIf="isGroupShown(3)">
+      <ion-card>
+        <ion-row align-items-start>
+          <ion-col class="oilpurchase">
+            <ion-item class="oilpurchase" style="color:red;">
+              <ion-label slack style="padding-left: 10px;color:red;">Select Product</ion-label>
+              <ion-select [(ngModel)]="productId" class="form-control" #reqFuel (ionChange)="ProductSelect(reqFuel.value)">
+                <ion-option value=0 selected>&nbsp;&nbsp;All</ion-option>
+                <ion-option *ngFor="let prod of productList;let i = index" [selected]="i===0" [value]="prod.id">
+                  &nbsp;&nbsp; {{prod.shortName}}
+                </ion-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-card-content>
+
+          <ion-row align-items-start>
+            <ion-col class="oilpurchase3">
+              Tank
+            </ion-col>
+            <ion-col class="oilpurchase3">
+              Product
+            </ion-col>
+            <ion-col class="oilpurchase3" text-right>
+              Capacity
+            </ion-col>
+            <ion-col class="oilpurchase3" text-right>
+              Available
+            </ion-col>
+          </ion-row>
+
+          <ion-row *ngFor="let oil of oilList;let index=index; let odd=odd; let even=even;" class="row" [ngClass]="{ oilpurchase: odd, oilpurchase2: even}">
+            <ion-col text-wrap>
+              {{oil.tankName}}
+            </ion-col>
+            <ion-col text-wrap>
+              {{oil.productName}}
+            </ion-col>
+            <ion-col text-right text-wrap>
+              {{oil.capacity |Mquantity}}
+            </ion-col>
+            <ion-col text-right text-wrap>
+              {{oil.currentQty |Mquantity}}
+            </ion-col>
+          </ion-row>
+
+          <ion-row align-items-start class="oilpurchase3">
+            <ion-col text-wrap>
+              <b>Total</b>
+            </ion-col>
+            <ion-col text-right text-wrap>
+
+            </ion-col>
+            <ion-col *ngIf="oilstock.tankCapacity!==0" text-right text-wrap>
+              <b>{{oilstock.tankCapacity |Mquantity}}</b>
+            </ion-col>
+            <ion-col *ngIf="oilstock.tankCapacity==0" text-right text-wrap>
+              <b>-</b>
+            </ion-col>
+            <ion-col *ngIf="oilstock.tankQty!==0" text-right text-wrap>
+              <b>{{oilstock.tankQty |Mquantity}}</b>
+            </ion-col>
+            <ion-col *ngIf="oilstock.tankQty==0" text-right text-wrap>
+              <b>-</b>
+            </ion-col>
+          </ion-row>
+
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+
+  <!-- Oil Purchased -->
+  <div text-wrap (click)="toggleGroup(1)" [ngClass]="{active: isGroupShown(1)}">
+    <div class="info-box bg-success">
+      <div class="info-box-content">
+        <ion-row class="mar">
+          <span class="info-box-text">Fuel Purchased<br>  (Last 7 Days)</span>
+        </ion-row>
+      </div>
+      <div class="info-box-content" style="text-align:right;">
+        <span class="info-box-number">
+          <ion-icon item-right [name]="isGroupShown(1) ? 'arrow-dropdown' : 'arrow-dropright'" style="padding-left: 10px;"></ion-icon>
+        </span>
+      </div>
+    </div>
+    <div *ngIf="isGroupShown(1)">
+      <ion-card>
+        <ion-card-content>
+          <ion-row align-items-start>
+            <ion-col class="Regulardash2">
+              <ion-item class="Regulardash2" style="color:red;">
+                <ion-label slack style="padding-left: 10px;color:red;">Select Product</ion-label>
+                <ion-select [(ngModel)]="productId" class="form-control" #reqFuel (ionChange)="ProductSelect(reqFuel.value)">
+                  <ion-option value=0 selected>All</ion-option>
+                  <ion-option *ngFor="let prod of productList;let i = index" [selected]="i===0" [value]="prod.id">
+                    &nbsp;&nbsp; {{prod.shortName}}
+                  </ion-option>
+                </ion-select>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row align-items-start>
+            <ion-col class="Regular-sales-dash" style="margin-left:0px;">
+              Date
+            </ion-col>
+            <ion-col class="Regular-sales-dash" text-right>
+              Ltr
+            </ion-col>
+            <ion-col class="Regular-sales-dash" text-right>
+              Rs
+            </ion-col>
+          </ion-row>
+
+          <ion-row *ngFor="let oil of pumpSummaryFilter;let index=index; let odd=odd; let even=even;" class="row"
+            [ngClass]="{ Regulardash2: odd, Regulardash3: even}">
+            <ion-col style="margin-left:0px;" text-wrap>
+              <!-- {{oil.orderDate |   dateTimeFormat}} -->
+              {{oil.orderDate | dateTimeFormat}}
+              <!-- {{oil.orderDate | dateTimeFormat}} -->
+            </ion-col>
+            <ion-col *ngIf="oil.quantity!==0" text-right text-wrap>
+              {{oil.quantity |Mquantity}}
+            </ion-col>
+            <ion-col *ngIf="oil.quantity==0" text-right text-wrap>
+              -
+            </ion-col>
+            <ion-col *ngIf="oil.amount!==0" text-right text-wrap>
+                {{oil.amount | Mcurrency}}
+              <!-- {{oil.amount |Mcurrency :'&nbsp;': 'symbol-narrow':"1.0"}} -->
+              
+            </ion-col>
+            <ion-col *ngIf="oil.amount==0" text-right text-wrap>
+              -
+            </ion-col>
+          </ion-row>
+
+          <ion-row align-items-start>
+            <ion-col class="Regular-sales-dash" style="margin-left:0px;" text-wrap>
+              <b>Total</b>
+            </ion-col>
+            <ion-col *ngIf="pumpSummary.totalQty!==0" class="Regular-sales-dash" text-right text-wrap>
+              <b>{{pumpSummary.totalQty |Mquantity}}</b>
+            </ion-col>
+            <ion-col *ngIf="pumpSummary.totalQty==0" class="Regular-sales-dash" text-right text-wrap>
+              <b>-</b>
+            </ion-col>
+            <ion-col *ngIf="pumpSummary.totalAmt!==0" class="Regular-sales-dash" text-right text-wrap>
+              <b>{{pumpSummary.totalAmt |Mcurrency}}</b>
+            </ion-col>
+            <ion-col *ngIf="pumpSummary.totalAmt==0" class="Regular-sales-dash" text-right text-wrap>
+              <b>-</b>
+            </ion-col>
+          </ion-row>
+
+
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+
+  <!-- Overall Sales -->
+  <div text-wrap (click)="toggleGroup(5)" [ngClass]="{active: isGroupShown(5)}">
+    <div class="info-box bg-primary">
+      <div class="info-box-content">
+        <ion-row class="mar">
+          <span class="info-box-text">Overall Fuel Sales<br> (Last 7 Days)</span>
+        </ion-row>
+      </div>
+      <div class="info-box-content" style="text-align:right;">
+        <span class="info-box-number">
+          <ion-icon item-right [name]="isGroupShown(5) ? 'arrow-dropdown' : 'arrow-dropright'" style="padding-left: 10px;"></ion-icon>
+        </span>
+      </div>
+    </div>
+    <div *ngIf="isGroupShown(5)">
+      <ion-card>
+        <ion-card-content>
+          <ion-row align-items-start>
+            <ion-col class="head-table oilpurchase">
+              <ion-item class="oilpurchase" style="color:red;">
+                <ion-label slack style="padding-left: 10px;color:red;">Select Product</ion-label>
+                <ion-select [(ngModel)]="productId" class="form-control" #reqFuel (ionChange)="ProductSelect(reqFuel.value)">
+                  <ion-option value=0 selected>All</ion-option>
+                  <ion-option *ngFor="let prod of productList;let i = index" [selected]="i===0" [value]="prod.id">
+                    &nbsp;&nbsp; {{prod.shortName}}
+                  </ion-option>
+                </ion-select>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row class="oilpurchase3"  *ngIf=overallhide align-items-start>
+            <ion-col style="margin-left:0px;">
+              Date
+            </ion-col>
+            <ion-col  text-right>
+              Ltr
+            </ion-col>
+            <ion-col text-right>
+              Rs
+            </ion-col>
+          </ion-row>
+
+          <ion-row *ngFor="let over of OverallSummary;let index=index; let odd=odd; let even=even;" class="row"
+            [ngClass]="{ oilpurchase2: odd, oilpurchase: even}">
+            <ion-col style="margin-left:0px;" text-wrap>
+              {{over.date |dateTimeFormat}}
+            </ion-col>
+            <ion-col *ngIf="over.qty!==0" text-right text-wrap>
+              {{over.qty |Mquantity}}
+            </ion-col>
+            <ion-col *ngIf="over.qty==0" text-right text-wrap>
+              -
+            </ion-col>
+            <ion-col *ngIf="over.amount!==0" text-right text-wrap>
+              {{over.amount |Mcurrency}}
+            </ion-col>
+            <ion-col *ngIf="over.amount==0" text-right text-wrap>
+              -
+            </ion-col>
+          </ion-row>
+
+
+          <ion-row *ngIf="overallhide" align-items-start>
+            <ion-col class="oilpurchase3" style="margin-left:0px;" text-wrap>
+              <b>Total</b>
+            </ion-col>
+            <ion-col *ngIf="overall.sumQty!==0" class="oilpurchase3" text-right text-wrap>
+              <b>{{overall.sumQty|Mquantity}}</b>
+            </ion-col>
+            <ion-col *ngIf="overall.sumQty==0" class="oilpurchase3" text-right text-wrap>
+              <b>-</b>
+            </ion-col>
+            <ion-col *ngIf="overall.sumAmount!==0" class="oilpurchase3" text-right text-wrap>
+              <b>{{overall.sumAmount |Mcurrency}}</b>
+            </ion-col>
+            <ion-col *ngIf="overall.sumAmount==0" class="oilpurchase3" text-right text-wrap>
+              <b>-</b>
+            </ion-col>
+          </ion-row>
+          <div text-center style="color: red;" *ngIf="overallshow">
+            "Sorry No Overall records are Present"
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+
+  <!-- Regular Sales -->
+  <div text-wrap (click)="toggleGroup(2)" [ngClass]="{active: isGroupShown(2)}">
+    <div class="info-box bg-success">
+      <div class="info-box-content">
+        <ion-row class="mar">
+          <span class="info-box-text">Regular Sales<br>  (Last 7 Days)</span>
+        </ion-row>
+      </div>
+      <div class="info-box-content" style="text-align:right;">
+        <span class="info-box-number">
+          <ion-icon item-right [name]="isGroupShown(2) ? 'arrow-dropdown' : 'arrow-dropright'" style="padding-left: 10px;"></ion-icon>
+        </span>
+      </div>
+    </div>
+    
+    <div *ngIf="isGroupShown(2)">
+      <ion-card>
+          <ion-row align-items-start>
+              <ion-col class="Regulardash2">
+                <ion-item class="Regulardash2" style="color:red;">
+                  <ion-label slack style="padding-left: 10px;color:red;">Select Product</ion-label>
+                  <ion-select [(ngModel)]="productId" class="form-control" #reqFuel (ionChange)="ProductSelect(reqFuel.value)">
+                    <ion-option value=0 selected>All</ion-option>
+                    <ion-option *ngFor="let prod of productList;let i = index" [selected]="i===0" [value]="prod.id">
+                      &nbsp;&nbsp; {{prod.shortName}}
+                    </ion-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+        <ion-card-content>
+
+          <ion-row *ngIf=regularHide align-items-start>
+            <ion-col class="Regular-sales-dash" style="margin-left:0px;">
+              Date
+            </ion-col>
+            <ion-col class="Regular-sales-dash" text-right>
+              Ltr
+            </ion-col>
+            <ion-col class="Regular-sales-dash" text-right>
+              Rs
+            </ion-col>
+          </ion-row>
+
+          <ion-row *ngFor="let rDetail of RegularDetail;let index=index; let odd=odd; let even=even;" class="row"
+            [ngClass]="{ Regulardash2: odd, Regulardash3: even}">
+            <ion-col style="margin-left:0px;" text-wrap>
+              {{rDetail.date | dateTimeFormat}}
+            </ion-col>
+            <ion-col *ngIf="rDetail.qty!==0" text-right text-wrap>
+              {{rDetail.qty |Mquantity}}
+            </ion-col>
+            <ion-col *ngIf="rDetail.qty==0" text-right text-wrap>
+              -
+            </ion-col>
+            <ion-col *ngIf="rDetail.amount!==0" text-right text-wrap>
+              {{rDetail.amount |Mcurrency}}
+            </ion-col>
+            <ion-col *ngIf="rDetail.amount==0" text-right text-wrap>
+              -
+            </ion-col>
+          </ion-row>
+
+
+          <ion-row *ngIf=regularHide align-items-start>
+            <ion-col class="Regular-sales-dash" style="margin-left:0px;" text-wrap>
+              <b>Total</b>
+            </ion-col>
+            <ion-col *ngIf="regular.totalQty!==0" class="Regular-sales-dash" text-right text-wrap>
+              <b>{{regular.totalQty |Mquantity}}</b>
+            </ion-col>
+            <ion-col *ngIf="regular.totalQty==0" class="Regular-sales-dash" text-right text-wrap>
+              <b>-</b>
+            </ion-col>
+            <ion-col *ngIf="regular.totalAmount!==0" class="Regular-sales-dash" text-right text-wrap>
+              <b>{{regular.totalAmount |Mcurrency}}</b>
+            </ion-col>
+            <ion-col *ngIf="regular.totalAmount==0" class="Regular-sales-dash" text-right text-wrap>
+              <b>-</b>
+            </ion-col>
+          </ion-row>
+          <div text-center style="color: red;" *ngIf="regularShow">
+            "Sorry No Regular sales records are Present"
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+
+  <!-- Credit Sales Fuel-->
+  <div *ngIf="activeCS==1" text-wrap (click)="toggleGroup(4)" [ngClass]="{active: isGroupShown(4)}">
+    <div class="info-box bg-primary">
+      <div class="info-box-content">
+        <ion-row class="mar">
+          <span class="info-box-text">Credit Fuel Sales<br> (Last 7 Days)</span>
+        </ion-row>
+      </div>
+      <div class="info-box-content" style="text-align:right;">
+        <span class="info-box-number">
+          <ion-icon item-right [name]="isGroupShown(4) ? 'arrow-dropdown' : 'arrow-dropright'" style="padding-left: 10px;"></ion-icon>
+        </span>
+      </div>
+    </div>
+    <div *ngIf="isGroupShown(4)">
+      <ion-card>
+        <ion-card-content>
+          <ion-row class="oilpurchase3"  align-items-start>
+            <ion-col col-2 style="margin-left:0px;">
+              Date
+            </ion-col>
+            <ion-col col-3  text-right>
+              Vehicles
+            </ion-col>
+            <ion-col col-3 text-right>
+              Ltr
+            </ion-col>
+            <ion-col col-3  text-right>
+              Rs
+            </ion-col>
+          </ion-row>
+
+          <ion-row *ngFor="let credit of creditList;let index=index; let odd=odd; let even=even;" class="row" [ngClass]="{ oilpurchase2:odd,oilpurchase: even}">
+            <ion-col col-3 style="margin-left:0px;">
+              {{credit.forDate | dateTimeFormat}}
+            </ion-col>
+
+            <ion-col col-2 *ngIf="credit.vehicle!==0" text-right text-wrap>
+              {{credit.vehicle |Mcurrency}}
+            </ion-col>
+            <ion-col col-2 *ngIf="credit.vehicle==0" text-right text-wrap>
+              -
+            </ion-col>
+
+            <ion-col col-3 *ngIf="credit.qty!==0" text-right text-wrap>
+              {{credit.qty |Mquantity}}
+            </ion-col>
+            <ion-col col-3 *ngIf="credit.qty==0" text-right text-wrap>
+              -
+            </ion-col>
+
+            <ion-col col-4 *ngIf="credit.amount!==0" text-right text-wrap>
+              {{credit.amount |Mcurrency}}
+            </ion-col>
+            <ion-col col-4 *ngIf="credit.amount==0" text-right text-wrap>
+              -
+            </ion-col>
+
+          </ion-row>
+
+          <ion-row class="oilpurchase3" align-items-start>
+            <ion-col col-3  style="margin-left:0px;" text-wrap>
+              <b>Total</b>
+            </ion-col>
+            <ion-col col-2 *ngIf="creditl.totalVehicle!==0" text-right text-wrap>
+                <b>{{creditl.totalVehicle |Mcurrency}}</b>
+              </ion-col>
+              <ion-col col-2 *ngIf="creditl.totalVehicle==0" text-right text-wrap>
+                <b>-</b>
+              </ion-col>
+            <ion-col col-3 *ngIf="creditl.totalCSQty!==0"  text-right text-wrap>
+              <b>{{creditl.totalCSQty |Mquantity}}</b>
+            </ion-col>
+            <ion-col col-3 *ngIf="creditl.totalCSQty==0"  text-right text-wrap>
+              <b>-</b>
+            </ion-col>
+            <ion-col col-4 *ngIf="creditl.totalCSAmount!==0"  text-right text-wrap>
+              <b>{{creditl.totalCSAmount |Mcurrency}}</b>
+            </ion-col>
+            <ion-col col-4 *ngIf="creditl.totalCSAmount==0"  text-right text-wrap>
+              <b>-</b>
+            </ion-col>
+          </ion-row>
+
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+
+  <!-- Credit Sales Cash-->
+  <div *ngIf="activeCS==1" text-wrap (click)="toggleGroup(9)" [ngClass]="{active: isGroupShown(9)}">
+    <div class="info-box bg-success">
+      <div class="info-box-content">
+        <ion-row class="mar">
+          <span class="info-box-text">Cash given to Customers 
+            <br>(Last 7 Days)</span>
+        </ion-row>
+      </div>
+      <div class="info-box-content" style="text-align:right;">
+        <span class="info-box-number">
+          <ion-icon item-right [name]="isGroupShown(9) ? 'arrow-dropdown' : 'arrow-dropright'" style="padding-left: 10px;"></ion-icon>
+        </span>
+      </div>
+    </div>
+    <div *ngIf="isGroupShown(9)">
+      <ion-card>
+        <ion-card-content>
+          <ion-row align-items-start class="Regular-sales-dash">
+            <ion-col style="margin-left:0px;">
+              Date
+            </ion-col>
+            <ion-col text-right>
+              Vehicles
+            </ion-col>
+            <ion-col text-right>
+              Rs
+            </ion-col>
+          </ion-row>
+
+          <ion-row *ngFor="let credit of cashList;let index=index; let odd=odd; let even=even;" class="row" [ngClass]="{ Regulardash3:odd,Regulardash2: even}">
+            <ion-col style="margin-left:0px;" text-wrap>
+              {{credit.forDate | dateTimeFormat}}
+            </ion-col>
+            <ion-col *ngIf="credit.vehicle!==0" text-right text-wrap>
+              {{credit.vehicle |Mcurrency}}
+            </ion-col>
+            <ion-col *ngIf="credit.vehicle==0" text-right text-wrap>
+              -
+            </ion-col>
+            <ion-col *ngIf="credit.amount!==0" text-right text-wrap>
+              {{credit.amount |Mcurrency}}
+            </ion-col>
+            <ion-col *ngIf="credit.amount==0" text-right text-wrap>
+              -
+            </ion-col>
+          </ion-row>
+
+          <ion-row align-items-start class="Regular-sales-dash">
+            <ion-col style="margin-left:0px;" text-wrap>
+              <b>Total</b>
+            </ion-col>
+            <ion-col *ngIf="cashl.totalVehicle!==0" text-right text-wrap>
+              <b>{{cashl.totalVehicle |Mcurrency}}</b>
+            </ion-col>
+            <ion-col *ngIf="cashl.totalVehicle==0" text-right text-wrap>
+              <b>-</b>
+            </ion-col>
+            <ion-col *ngIf="cashl.totalCSAmount!==0" text-right text-wrap>
+              <b>{{cashl.totalCSAmount |Mcurrency}}</b>
+            </ion-col>
+            <ion-col *ngIf="cashl.totalCSAmount==0" text-right text-wrap>
+              <b>-</b>
+            </ion-col>
+          </ion-row>
+
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+
+  <!-- Loyalty Sales -->
+  <div *ngIf="activeLS==1" text-wrap (click)="toggleGroup(7)" [ngClass]="{active: isGroupShown(7)}">
+    <div class="info-box bg-primary">
+      <div class="info-box-content">
+        <ion-row class="mar">
+          <span class="info-box-text">Loyalty Sales<br> (Last 7 Days)</span>
+        </ion-row>
+      </div>
+      <div class="info-box-content" style="text-align:right;">
+        <span class="info-box-number">
+          <ion-icon item-right [name]="isGroupShown(7) ? 'arrow-dropdown' : 'arrow-dropright'" style="padding-left: 10px;"></ion-icon>
+        </span>
+      </div>
+    </div>
+    <div *ngIf="isGroupShown(7)">
+      <ion-card>
+        <ion-card-content>
+
+          <ion-row text-center>
+            <ion-col class="head-table oilpurchase" style="margin-left:0px;">
+              <b>Total Active Loyalty Drivers : {{loyality.totalDriver}}</b>
+            </ion-col>
+          </ion-row>
+
+          <ion-row align-items-start *ngIf="loyalityHide">
+            <ion-col class="oilpurchase3" style="margin-left:0px;">
+              Date
+            </ion-col>
+            <ion-col class="oilpurchase3" text-right>
+              Vehicles
+            </ion-col>
+            <ion-col class="oilpurchase3" text-right>
+              Ltr
+            </ion-col>
+            <ion-col class="oilpurchase3" text-right>
+              Rs
+            </ion-col>
+            
+          </ion-row>
+
+          <ion-row align-items-start *ngFor="let ldetail of LoaylityDetail;let index=index; let odd=odd; let even=even;"
+            class="row" [ngClass]="{ oilpurchase2:odd,oilpurchase:even}">
+            <ion-col style="margin-left:0px;" text-wrap>
+              {{ldetail.date | dateTimeFormat}}
+            </ion-col>
+            <ion-col *ngIf="ldetail.sumDriver!==0" text-right text-wrap>
+              {{ldetail.sumDriver |Mcurrency}}
+            </ion-col>
+            <ion-col *ngIf="ldetail.sumDriver==0" text-right text-wrap>
+              -
+            </ion-col>
+            <ion-col *ngIf="ldetail.sumQuantity!==0" style="margin-left:1px;" text-right text-wrap>
+              {{ldetail.sumQuantity|Mquantity}}
+            </ion-col>
+            <ion-col *ngIf="ldetail.sumQuantity==0" text-right text-wrap>
+              -
+            </ion-col>
+            <ion-col *ngIf="ldetail.sumAmount!==0" text-right text-wrap>
+              {{ldetail.sumAmount|Mcurrency}}
+            </ion-col>
+            <ion-col *ngIf="ldetail.sumAmount==0" text-right text-wrap>
+              -
+            </ion-col>
+           
+          </ion-row>
+          <ion-row align-items-start *ngIf="loyalityHide" class="oilpurchase3">
+            <ion-col style="margin-left:0px;">
+              <b>Total</b>
+            </ion-col>
+            <ion-col *ngIf="loyality.totalsumDriver!==0" text-right text-wrap>
+              <b>{{loyality.totalsumDriver}}</b>
+            </ion-col>
+            <ion-col *ngIf="loyality.totalsumDriver==0" text-right text-wrap>
+              <b>-</b>
+            </ion-col>
+            <ion-col *ngIf="loyality.totalsumQuantity!==0" text-right text-wrap>
+              <b>{{loyality.totalsumQuantity|Mquantity}}</b>
+            </ion-col>
+            <ion-col *ngIf="loyality.totalsumQuantity==0" text-right text-wrap>
+              <b>-</b>
+            </ion-col>
+            <ion-col *ngIf="loyality.totalsumAmount!==0" text-right text-wrap>
+              <b>{{loyality.totalsumAmount|Mcurrency}}</b>
+            </ion-col>
+            <ion-col *ngIf="loyality.totalsumAmount==0" text-right text-wrap>
+              <b>-</b>
+            </ion-col>
+         
+          </ion-row>
+          <div text-center style="color: red;" *ngIf="loyalityShow">
+            "Sorry No Loyalty records are Present"
+          </div>
+          <ion-row text-center>
+            <ion-col class="oilpurchase" style="margin-left:0px;">
+              <b>New Drivers Registered Today : {{loyality.newDrivers}}</b>
+            </ion-col>
+          </ion-row>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+
+  <!-- Paymodewise Sales -->
+  <!-- <div text-wrap (click)="toggleGroup(6)" [ngClass]="{active: isGroupShown(6)}">
+    <div class="info-box bg-success">
+      <div class="info-box-content">
+        <ion-row class="mar">
+          <span class="info-box-text">Paymodewise Received <br>(Last 7 Days)</span>
+        </ion-row>
+      </div>
+      <div class="info-box-content" style="text-align:right;">
+        <span class="info-box-number">
+          <ion-icon item-right [name]="isGroupShown(6) ? 'arrow-dropdown' : 'arrow-dropright'" style="padding-left: 10px;"></ion-icon>
+        </span>
+      </div>
+    </div> -->
+    <!-- <div *ngIf="isGroupShown(6)">
+      <ion-card>
+        <ion-card-content>
+          <ion-row align-items-start>
+            <ion-col class="head-table Regulardash2">
+              <ion-item class="Regulardash2" style="color:red;">
+                <ion-label slack style="padding-left: 10px;color:red;">Select Paymode</ion-label>
+                <ion-select [(ngModel)]="paymodeId" class="form-control" #paymodeid (ionChange)="selectPaymode(paymodeid.value)">
+                  <ion-option value=0 selected>All</ion-option>
+                  <ion-option *ngFor="let prod of selectPaymodeList;let i = index" [selected]="i===0" [value]="prod.id">
+                    &nbsp;&nbsp; {{prod.name}}
+                  </ion-option>
+                </ion-select>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row align-items-start class="Regular-sales-dash">
+            <ion-col style="margin-left:0px;">
+              Date
+            </ion-col>
+            <ion-col *ngIf="activeCS==1" text-right>
+              Credit
+            </ion-col>
+
+            <ion-col text-right>
+              Regular
+            </ion-col>
+            <ion-col *ngIf="activeCS!==0 && activeLS!==0" text-right>
+              Total
+            </ion-col>
+          </ion-row>
+
+          <ion-row align-items-start *ngFor="let pdetail of PaymodeList;let index=index; let odd=odd; let even=even;"
+            class="row" [ngClass]="{ Regulardash2:odd,Regulardash3:even}">
+            <ion-col style="margin-left:0px;" text-wrap>
+              {{pdetail.date |  dateTimeFormat}}
+            </ion-col>
+            <ion-col *ngIf="pdetail.creditAmount!==0 && activeCS==1" text-right text-wrap>
+              {{pdetail.creditAmount | Mcurrency:'2'}}
+            </ion-col>
+            <ion-col *ngIf="pdetail.creditAmount==0 && activeCS==1" text-right text-wrap>
+              -
+            </ion-col>
+           
+            <ion-col *ngIf="pdetail.regularAmount!==0" text-right text-wrap>
+              {{pdetail.regularAmount | Mcurrency:'2'}}
+            </ion-col>
+            <ion-col *ngIf="pdetail.regularAmount==0" text-right text-wrap>
+              -
+            </ion-col>
+            <ion-col *ngIf="pdetail.total!==0 && activeCS!==0 && activeLS!==0" text-right text-wrap>
+              {{pdetail.total | Mcurrency:'2'}}
+            </ion-col>
+            <ion-col *ngIf="pdetail.total==0 && activeCS!==0 && activeLS!==0" text-right text-wrap>
+              -
+            </ion-col>
+          </ion-row>
+
+          <ion-row align-items-start class="Regular-sales-dash">
+            <ion-col style="margin-left:0px;" text-wrap>
+              <b>Total</b>
+            </ion-col>
+            <ion-col *ngIf="paymode.totalCreditAmount!==0  && activeCS==1" text-right text-wrap>
+              <b> {{paymode.totalCreditAmount |Mcurrency:'2'}}</b>
+            </ion-col>
+            <ion-col *ngIf="paymode.totalCreditAmount==0  && activeCS==1" text-right text-wrap>
+              <b>-</b>
+            </ion-col>
+            <ion-col *ngIf="paymode.totalRegularAmount!==0" text-right text-wrap>
+              <b> {{paymode.totalRegularAmount |Mcurrency:'2'}}</b>
+            </ion-col>
+            <ion-col *ngIf="paymode.totalRegularAmount==0" text-right text-wrap>
+              <b>-</b>
+            </ion-col>
+            <ion-col *ngIf="paymode.totalAmount!==0 && activeCS!==0 && activeLS!==0" text-right text-wrap>
+              <b> {{paymode.totalAmount |Mcurrency:'2'}}</b>
+            </ion-col>
+            <ion-col *ngIf="paymode.totalAmount==0 && activeCS!==0 && activeLS!==0" text-right text-wrap>
+              <b>-</b>
+            </ion-col>
+          </ion-row>
+
+          <ion-row text-center>
+            <ion-col class="Regulardash2" style="margin-left:0px;">
+              <span style="color:red;">*</span>All Amount in<b> Lacs</b>
+            </ion-col>
+          </ion-row>
+
+        </ion-card-content>
+      </ion-card>
+    </div> -->
+  <!-- </div> -->
+
+</ion-content>
+
+<ion-footer>
+  <ion-row>
+    <ion-col col-12 style="padding: 0;">
+      <button ion-button color="positive" full (click)="reportRequest()" class="footer-btn">
+        Reports
+      </button>
+    </ion-col>
+  </ion-row>
+</ion-footer>
