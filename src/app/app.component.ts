@@ -365,7 +365,7 @@ export class MyApp {
               }, error => {
          this.basicData.sendErrorNotification(error);
        })
-  } 
+ } 
  
   
 

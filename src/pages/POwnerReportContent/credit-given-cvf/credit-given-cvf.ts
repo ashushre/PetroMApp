@@ -206,6 +206,7 @@ export class CreditGivenCvfPage {
     } else {
       this.transporterNameList = [];
     }
+    console.log(this.query,this,this.transporterNameList)
   }
 
   select(item) {

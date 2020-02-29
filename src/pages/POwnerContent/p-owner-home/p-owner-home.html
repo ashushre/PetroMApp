@@ -722,6 +722,136 @@
     </div>
   </div>
 
+  <!-- Dealer Sale & stack -->
+  <div text-wrap (click)="toggleGroup(10)" [ngClass]="{active: isGroupShown(10)}">
+    <div class="info-box bg-success">
+      <div class="info-box-content">
+        <ion-row class="mar">
+          <span class="info-box-text">Dealer Sales & Stock</span>
+        </ion-row>
+      </div>
+      <div class="info-box-content" style="text-align:right;">
+        <span class="info-box-number">
+          <ion-icon item-right [name]="isGroupShown(10) ? 'arrow-dropdown' : 'arrow-dropright'" style="padding-left: 10px;"></ion-icon>
+        </span>
+      </div>
+    </div>
+    
+    <div *ngIf="isGroupShown(10)">
+      <ion-card>
+
+        <ion-card-content>
+
+          <ion-row *ngIf=regularHide align-items-start>
+            <ion-col class="Regular-sales-dash" style="margin-left:0px;">
+            (Ltr)
+            </ion-col>
+            <ion-col class="Regular-sales-dash" text-right>
+             HSD
+            </ion-col>
+            <ion-col class="Regular-sales-dash" text-right>
+              MS
+            </ion-col>
+          </ion-row>
+
+          <ion-row class="Regulardash2">
+            <ion-col  style="margin-left:0px;" text-wrap>
+              Sales
+            </ion-col>
+            <ion-col *ngIf="DailysaleStock.currentHSDSales!==0" text-right text-wrap>
+              {{DailysaleStock.currentHSDSales | Mcurrency}}
+            </ion-col>
+            <ion-col *ngIf="DailysaleStock.currentHSDSales==0" text-right text-wrap>
+              -
+            </ion-col>
+            <ion-col *ngIf="DailysaleStock.currentMSSales!==0" text-right text-wrap>
+              {{DailysaleStock.currentMSSales | Mcurrency}}
+            </ion-col>
+            <ion-col *ngIf="DailysaleStock.currentMSSales==0" text-right text-wrap>
+              -
+            </ion-col>
+          </ion-row>
+
+          <ion-row class="Regulardash2">
+            <ion-col  style="margin-left:0px;" text-wrap>
+             Cumulative Sales
+            </ion-col>
+            <ion-col *ngIf="DailysaleStock.cumHsdSales!==0" text-right text-wrap>
+              {{DailysaleStock.cumHsdSales | Mcurrency}}
+            </ion-col>
+            <ion-col *ngIf="DailysaleStock.cumHsdSales==0" text-right text-wrap>
+              -
+            </ion-col>
+            <ion-col *ngIf="DailysaleStock.cummsSales!==0" text-right text-wrap>
+              {{DailysaleStock.cummsSales | Mcurrency}}
+            </ion-col>
+            <ion-col *ngIf="DailysaleStock.cummsSales==0" text-right text-wrap>
+              -
+            </ion-col>
+          </ion-row>
+          <ion-row class="Regulardash3">
+            <ion-col style="margin-left:0px;" text-wrap>
+             Stock 
+            </ion-col>
+            <ion-col *ngIf="DailysaleStock.stockHSD!==0" text-right text-wrap>
+              {{DailysaleStock.stockHSD | Mcurrency}}
+            </ion-col>
+            <ion-col *ngIf="DailysaleStock.stockHSD==0" text-right text-wrap>
+              -
+            </ion-col>
+            <ion-col *ngIf="DailysaleStock.stockMS!==0" text-right text-wrap>
+              {{DailysaleStock.stockMS | Mcurrency}}
+            </ion-col>
+            <ion-col *ngIf="DailysaleStock.stockMS==0" text-right text-wrap>
+              -
+            </ion-col>
+          </ion-row>
+
+
+          <ion-row class="Regulardash2"  *ngIf=regularHide align-items-start>
+            <ion-col style="margin-left:0px;" text-wrap>
+              <b>Avg Daily Sales</b>
+            </ion-col>
+            <ion-col *ngIf="DailysaleStock.avgHSD!==0"  text-right text-wrap>
+              <b>{{DailysaleStock.avgHSD |Mcurrency}}</b>
+            </ion-col>
+            <ion-col *ngIf="DailysaleStock.avgHSD==0"  text-right text-wrap>
+              <b>-</b>
+            </ion-col>
+            <ion-col *ngIf="DailysaleStock.avgMS!==0" text-right text-wrap>
+              <b>{{DailysaleStock.avgMS |Mcurrency}}</b>
+            </ion-col>
+            <ion-col *ngIf="DailysaleStock.avgMS==0" text-right text-wrap>
+              <b>-</b>
+            </ion-col>
+          </ion-row>
+
+          <ion-row class="Regulardash3">
+            <ion-col style="margin-left:0px;" text-wrap>
+             <b>Projected Monthly Sales</b> 
+            </ion-col>
+            <ion-col *ngIf="DailysaleStock.projMonthHSD!==0" text-right text-wrap>
+              {{DailysaleStock.projMonthHSD |Mcurrency}}
+            </ion-col>
+            <ion-col *ngIf="DailysaleStock.projMonthHSD==0" text-right text-wrap>
+              -
+            </ion-col>
+            <ion-col *ngIf="DailysaleStock.projMonthMS!==0" text-right text-wrap>
+              {{DailysaleStock.projMonthMS |Mcurrency}}
+            </ion-col>
+            <ion-col *ngIf="DailysaleStock.projMonthMS==0" text-right text-wrap>
+              -
+            </ion-col>
+          </ion-row>
+
+          <div text-center style="color: red;" *ngIf="regularShow">
+            "Sorry No Regular sales records are Present"
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+
   <!-- Paymodewise Sales -->
   <!-- <div text-wrap (click)="toggleGroup(6)" [ngClass]="{active: isGroupShown(6)}">
     <div class="info-box bg-success">

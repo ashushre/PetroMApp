@@ -59,7 +59,7 @@
           [(ngModel)]=query (keyup)=filter()>
       </ion-col>
     </ion-row>
-    <div class="" *ngIf="transporterList.length > 0">
+    <div class="">
       <ul *ngFor="let item of transporterNameList">
         <li *ngIf="query.length > 2">
           <a (click)="select(item)">{{item}}</a>

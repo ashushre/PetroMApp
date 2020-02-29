@@ -26,6 +26,7 @@ export class Reports {
     advancedAmount: number;
     totalAmount: number;
     totalQty: number;
+    totalAmt;
     creditLimitAllotted: number;
     creditLimitBalance: number;
     transporterId: number;
@@ -89,6 +90,16 @@ url:any;
     getPaymodeList;
     purchaseCount;
     smshistory;
+    cumHsdSales;
+    cummsSales;
+    stockHSD;
+    stockMS;
+    avgMS;
+    avgHSD;
+    currentHSDSales;
+    currentMSSales;
+    projMonthMS;
+    projMonthHSD;
   link: any;
     constructor() {
     }

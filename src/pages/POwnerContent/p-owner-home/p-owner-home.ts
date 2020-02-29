@@ -57,6 +57,7 @@ export class POwnerHomePage {
 
   shownGroup = null;
   outstandingAmount: number;
+  DailysaleStock: Reports;
  
 
   constructor(
@@ -109,6 +110,7 @@ export class POwnerHomePage {
       this.pumpId = val;
       this.allDashboradReport();
       this.showCurrentShift();
+      this.getDailySaleStock();
     }),err=>{
       console.log(err);
     };
@@ -238,6 +240,7 @@ export class POwnerHomePage {
 
       this.regular = res.getRegularSalesDashboard;
       this.RegularDetail = res.getRegularSalesDashboard.sales;
+      console.log(res)
       if (this.RegularDetail == null || this.RegularDetail.length == 0) {
         this.regularShow = true;
         this.regularHide = false;
@@ -329,34 +332,36 @@ export class POwnerHomePage {
     let loyalty=this.LoaylityDetail;
     let totalSales=this.OverallSummary;
   //  let regular[];
-    for(var i=0;i<this.OverallSummary.length;i++)
-    {
-      if(totalSales[i].qty==0)
-      {
-        this.RegularDetail[i].qty=0;
-        this.RegularDetail[i].amount=0;
-      }
-      else
-      {
-        this.RegularDetail[i].qty=totalSales[i].qty-(credit[i].qty+loyalty[i].sumQuantity);
-        this.RegularDetail[i].amount=totalSales[i].amount-(credit[i].amount+loyalty[i].sumAmount);
-      //  this.transform(this.RegularDetail[i].qty);
-        if(this.RegularDetail[i].qty<0)
-        {
-          this.RegularDetail[i].qty=0;
-          this.RegularDetail[i].amount=0;
-        }
-      }
+    // for(var i=0;i<this.OverallSummary.length;i++)
+    // {
+    //   if(totalSales[i].qty==0)
+    //   {
+    //     this.RegularDetail[i].qty=0;
+    //     this.RegularDetail[i].amount=0;
+    //   }
+    //   else
+    //   {
+    //     this.RegularDetail[i].qty=parseInt(totalSales[i].qty)-(parseInt(credit[i].qty)+parseInt(loyalty[i].sumQuantity));
+    //     this.RegularDetail[i].amount=parseInt(totalSales[i].amount)-(parseInt(credit[i].amount)+parseInt(loyalty[i].sumAmount));
+    //   //  this.transform(this.RegularDetail[i].qty);
+      
+    //     console.log(this.RegularDetail[i].qty,totalSales[i].qty,credit[i].qty,loyalty[i].sumQuantity)
+    //     if(this.RegularDetail[i].qty<0)
+    //     {
+    //       this.RegularDetail[i].qty=0;
+    //       this.RegularDetail[i].amount=0;
+    //     }
+    //   }
 
-    }
-    this.regular.totalQty=0;
-    this.regular.totalAmount=0;
-    for(var y=0;y<this.RegularDetail.length;y++)
-    {
+    // }
+    // this.regular.totalQty=0;
+    // this.regular.totalAmount=0;
+    // for(var y=0;y<this.RegularDetail.length;y++)
+    // {
     
-      this.regular.totalQty=this.regular.totalQty+this.RegularDetail[y].qty;
-      this.regular.totalAmount =this.regular.totalAmount +this.RegularDetail[y].amount;
-    }
+    //   this.regular.totalQty=this.regular.totalQty+this.RegularDetail[y].qty;
+    //   this.regular.totalAmount =this.regular.totalAmount +this.RegularDetail[y].amount;
+    // }
 
   }  
     , err => {
@@ -364,6 +369,13 @@ export class POwnerHomePage {
        loader.dismiss();
     });
 
+  }
+
+  getDailySaleStock(){
+    this.reportData.getDailySaleStock(this.pumpId).subscribe(res => {
+      console.log(res);
+      this.DailysaleStock=res;
+    });
   }
 
   openWebpage(url: string) {

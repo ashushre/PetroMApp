@@ -203,6 +203,13 @@ allDashboardReports(pumpId, productId, paymodeId):Observable<Reports>
   return this.http.get<Reports>(this.apiUrl+"/pumpreports/allDashboardReports/"+pumpId+ "/"+productId+ "/"+paymodeId, { headers: this.reqHeader })
   .catch(this.errorHandler);
 }
+//Route::get('pumpreports/getDailySaleStock/{pumpId}/{date}', 'Api\PumpReportsController@getDailySaleStock');
+getDailySaleStock(pumpId):Observable<Reports>
+{
+  console.log(this.token,this.reqHeader);
+  return this.http.get<Reports>(this.apiUrl+"/pumpreports/getDailySaleStock/"+pumpId+ "/"+0, { headers: this.reqHeader })
+  .catch(this.errorHandler);
+}
 getDSRReport(pumpId,productId,twoDate):Observable<Reports[]>
 {
   return this.http.get<Reports[]>(this.apiUrl+"/pumpreports/getDSRReport/"+pumpId+"/"+productId+"/"+twoDate, { headers: this.reqHeader })

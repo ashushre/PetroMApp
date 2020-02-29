@@ -133,6 +133,9 @@
               <ion-col>
                 Expense
               </ion-col>
+              <ion-col>
+                Description
+              </ion-col>
               <ion-col text-right>
                 Amount
               </ion-col>
@@ -140,6 +143,12 @@
             <ion-row *ngFor="let expenseDetail of expense.data;">
               <ion-col>
                 {{expenseDetail.name}}
+              </ion-col>
+              <ion-col *ngIf="expenseDetail.description!=null">
+                {{expenseDetail.description}}
+              </ion-col>
+              <ion-col *ngIf="expenseDetail.description==null">
+                -
               </ion-col>
               <ion-col text-right>
                 {{expenseDetail.amount |Mcurrency :'2'}}
